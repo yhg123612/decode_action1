@@ -1,1095 +1,654 @@
-//Mon Dec 02 2024 09:04:53 GMT+0000 (Coordinated Universal Time)
+//Thu Dec 05 2024 08:23:30 GMT+0000 (Coordinated Universal Time)
 //Base:https://github.com/echo094/decode-js
 //Modify:https://github.com/smallfawn/decode_action
-const $ = new Env("星播客抽奖"),
-  axios = require("axios");
-let request = require("request");
-request = request.defaults({
-  "jar": true
-});
-const {
-    log
-  } = console,
-  Notify = 1,
-  debug = 0;
-let xbkhd = ($.isNode() ? process.env.xbkhd : $.getdata("xbkhd")) || "",
-  xbkhdArr = [],
-  data = "",
-  msg = "";
-var hours = new Date().getMonth(),
-  timestamp = Math.round(new Date().getTime()).toString();
-!(async () => {
-  if (typeof $request !== "undefined") await GetRewrite();else {
-    if (!(await Envs())) return;else {
-      log("\n\n=============================================    \n脚本执行 - 北京时间(UTC+8)：" + new Date(new Date().getTime() + new Date().getTimezoneOffset() * 60 * 1000 + 28800000).toLocaleString() + " \n=============================================\n");
-      log("\n============ 微信小程序：柠檬玩机 ============");
-      log("\n=================== 共找到 " + xbkhdArr.length + " 个账号 ===================");
-      debug && log("【debug】 这是你的全部账号数组:\n " + xbkhdArr);
-      for (let _0x33b1e7 = 0; _0x33b1e7 < xbkhdArr.length; _0x33b1e7++) {
-        let _0x57e18d = _0x33b1e7 + 1;
-        addNotifyStr("\n==== 开始【第 " + _0x57e18d + " 个账号】====\n", true);
-        xbkhd = xbkhdArr[_0x33b1e7];
-        xbktoken = xbkhd.split("&")[0];
-        xbkphone = xbkhd.split("&")[1];
-        await checknm();
-        if (nmwj == "微信小程序：柠檬玩机") {
-          log("==检测直播间抽奖==");
-          await checkins(1);
-          log("==检测直播间抽奖页面1==");
-          await checkins(2);
-          log("==预约抽奖==");
-          await checkin(1);
-          log("==预约抽奖页面1==");
-          await checkin(2);
-          log("==查询==");
-          await getMyWinList();
+var version_ = 'jsjiami.com.v7';
+var _0x31626c = _0x1588;
+if (function (_0x3b99fa, _0x226e94, _0x457035, _0x4e754f, _0x8cde0a, _0x481bfa, _0x2a48df) {
+  _0x3b99fa = _0x3b99fa >> 0x5;
+  _0x481bfa = 'hs';
+  _0x2a48df = 'hs';
+  return function (_0x149009, _0x1de2d2, _0x767e71, _0x7933f3, _0x5ed2de) {
+    var _0x529b81 = _0x1588;
+    _0x7933f3 = 'tfi';
+    _0x481bfa = _0x7933f3 + _0x481bfa;
+    _0x5ed2de = 'up';
+    _0x2a48df += _0x5ed2de;
+    _0x481bfa = _0x767e71(_0x481bfa);
+    _0x2a48df = _0x767e71(_0x2a48df);
+    _0x767e71 = 0x0;
+    var _0x5c7945 = _0x149009();
+    while (!![] && --_0x4e754f + _0x1de2d2) {
+      try {
+        _0x7933f3 = parseInt(_0x529b81(0x14f, 'dAmJ')) / 0x1 * (parseInt(_0x529b81(0xfa, ']mm[')) / 0x2) + -parseInt(_0x529b81(0x196, 'zxM5')) / 0x3 + -parseInt(_0x529b81(0x1da, 'kEEx')) / 0x4 * (parseInt(_0x529b81(0x144, 'zxM5')) / 0x5) + parseInt(_0x529b81(0x1d2, '1MK9')) / 0x6 * (-parseInt(_0x529b81(0xec, '5VAP')) / 0x7) + parseInt(_0x529b81(0x1e0, '4XT$')) / 0x8 * (-parseInt(_0x529b81(0x192, ']mm[')) / 0x9) + parseInt(_0x529b81(0x123, 'lqA3')) / 0xa + parseInt(_0x529b81(0x1c2, 'Bt(&')) / 0xb * (parseInt(_0x529b81(0x128, 'Yo*w')) / 0xc);
+      } catch (_0x24ecf2) {
+        _0x7933f3 = _0x767e71;
+      } finally {
+        _0x5ed2de = _0x5c7945[_0x481bfa]();
+        if (_0x3b99fa <= _0x4e754f) {
+          if (_0x767e71) {
+            if (_0x8cde0a) {
+              _0x7933f3 = _0x5ed2de;
+            } else {
+              _0x8cde0a = _0x5ed2de;
+            }
+          } else {
+            _0x767e71 = _0x5ed2de;
+          }
         } else {
-          if (nmwj !== "微信小程序：柠檬玩机") {
-            log(nmwj);
-            return;
-          }
-        }
-      }
-    }
-  }
-})().catch(_0x329c68 => log(_0x329c68)).finally(() => $.done());
-async function checkin(_0x5a0af1) {
-  return new Promise(_0x4b05b0 => {
-    var _0x5c07d0 = {
-      "method": "GET",
-      "url": "https://xbk.189.cn/xbkapi/api/room/index/floor?provinceCode=01&pageType=1&page=" + _0x5a0af1 + "&khd=1",
-      "headers": {
-        "Host": "xbk.189.cn",
-        "Connection": "keep-alive",
-        "request-startTimes": "2023-03-07 15:29:58",
-        "request-startTime": "1678174198406",
-        "Authorization": xbktoken,
-        "Accept": "application/json, text/plain, */*",
-        "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36 MicroMessenger/7.0.4.501 NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF",
-        "Referer": "https://xbk.189.cn/xbk/newHome?tab=1&l=ticketerror&version=9.3.3&errorticket=183ea7e425377de9f2a2f862557b32d45ff4211a48f70aa4ec4c3decc1d47ebfdbb54391b548e7cf0b817414b7a9f04634fad1e79f4a1e12cecc94b0037fe5c55556f282b7e25d1f967126db75d37b695062d31b46a56658ecaefec6b2fa30c6&loginType=1",
-        "Accept-Language": "zh-CN,zh;q=0.9",
-        "Accept-Encoding": "gzip, deflate"
-      }
-    };
-    debug && (log("\n【debug】=============== 这是  请求 url ==============="), log(JSON.stringify(_0x5c07d0)));
-    axios.request(_0x5c07d0).then(async function (_0x87d0f6) {
-      try {
-        data = _0x87d0f6.data;
-        debug && (log("\n\n【debug】===============这是 返回data=============="), log(JSON.stringify(_0x87d0f6.data)));
-        if (data.code == 0) {
-          list = data.data;
-          for (i in list) {
-            if (list[i].liveType == 1 && list[i].isReserve == 0) {
-              {
-                log(list[i].nickname);
-                liveId = list[i].liveId;
-                period = list[i].period;
-                await reserve(liveId, period);
-                await $.wait(5000);
-                await equityExchangeCaptcha();
-                await lottery(liveId, period);
-              }
+          if (_0x767e71 == _0x8cde0a['replace'](/[bfuPlIrNHQJOhSwKMFpCA=]/g, '')) {
+            if (_0x7933f3 === _0x1de2d2) {
+              _0x5c7945['un' + _0x481bfa](_0x5ed2de);
+              break;
             }
+            _0x5c7945[_0x2a48df](_0x5ed2de);
           }
         }
-      } catch (_0xa8e83e) {
-        log("异常：" + JSON.stringify(_0x87d0f6.data) + "，原因：" + data.message);
       }
-    }).catch(function (_0x51e03c) {
-      console.error(_0x51e03c);
-    }).then(_0xb1c7ce => {
-      _0x4b05b0();
-    });
+    }
+  }(_0x457035, _0x226e94, function (_0x2a3e6e, _0x19441d, _0x45b56b, _0x54b736, _0x40025c, _0x53a536, _0x2a6e86) {
+    _0x19441d = '\x73\x70\x6c\x69\x74';
+    _0x2a3e6e = arguments[0x0];
+    _0x2a3e6e = _0x2a3e6e[_0x19441d]('');
+    _0x45b56b = `\x72\x65\x76\x65\x72\x73\x65`;
+    _0x2a3e6e = _0x2a3e6e[_0x45b56b]('\x76');
+    _0x54b736 = `\x6a\x6f\x69\x6e`;
+    0x1379ea;
+    return _0x2a3e6e[_0x54b736]('');
   });
+}(0x17c0, 0x32960, _0x56e2, 0xc0), _0x56e2) {
+  version_ = _0x56e2;
 }
-async function checkins(_0x3f53c3) {
-  return new Promise(_0x21bcb1 => {
-    var _0x498c07 = {
-      "method": "GET",
-      "url": "https://xbk.189.cn/xbkapi/api/room/index/floor?provinceCode=01&pageType=1&page=" + _0x3f53c3 + "&khd=1",
-      "headers": {
-        "Host": "xbk.189.cn",
-        "Connection": "keep-alive",
-        "request-startTimes": "2023-03-07 15:29:58",
-        "request-startTime": "1678174198406",
-        "Authorization": xbktoken,
-        "Accept": "application/json, text/plain, */*",
-        "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36 MicroMessenger/7.0.4.501 NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF",
-        "Referer": "https://xbk.189.cn/xbk/newHome?tab=1&l=ticketerror&version=9.3.3&errorticket=183ea7e425377de9f2a2f862557b32d45ff4211a48f70aa4ec4c3decc1d47ebfdbb54391b548e7cf0b817414b7a9f04634fad1e79f4a1e12cecc94b0037fe5c55556f282b7e25d1f967126db75d37b695062d31b46a56658ecaefec6b2fa30c6&loginType=1",
-        "Accept-Language": "zh-CN,zh;q=0.9",
-        "Accept-Encoding": "gzip, deflate"
-      }
-    };
-    debug && (log("\n【debug】=============== 这是  请求 url ==============="), log(JSON.stringify(_0x498c07)));
-    axios.request(_0x498c07).then(async function (_0xe512eb) {
-      try {
-        data = _0xe512eb.data;
-        debug && (log("\n\n【debug】===============这是 返回data=============="), log(JSON.stringify(_0xe512eb.data)));
-        if (data.code == 0) {
-          {
-            list = data.data;
-            for (i in list) {
-              if (list[i].goodsCount > 0) {
-                {
-                  nickname = list[i].nickname;
-                  liveId = list[i].liveId;
-                  period = list[i].period;
-                  await getLiveGoodsList(liveId);
-                  await $.wait(5000);
-                }
-              }
-            }
-          }
+const $ = new Env(_0x31626c(0x139, 'Yo*w')),
+  notify = $['isNode']() ? require(_0x31626c(0x176, 'lqA3')) : '',
+  notifyFlag = 0x0,
+  debug = 0x0;
+function _0x1588(_0x35bfda, _0x1e8416) {
+  var _0x56e221 = _0x56e2();
+  _0x1588 = function (_0x158872, _0x1de607) {
+    _0x158872 = _0x158872 - 0xce;
+    var _0x44e910 = _0x56e221[_0x158872];
+    if (_0x1588['kFZeTF'] === undefined) {
+      var _0x1fd736 = function (_0x5cae6f) {
+        var _0x47493d = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=';
+        var _0xdcf3bc = '',
+          _0x35415c = '';
+        for (var _0x293f2e = 0x0, _0x146924, _0x4c0c12, _0x29932c = 0x0; _0x4c0c12 = _0x5cae6f['charAt'](_0x29932c++); ~_0x4c0c12 && (_0x293f2e % 0x4 ? _0x146924 = _0x146924 * 0x40 + _0x4c0c12 : _0x146924 = _0x4c0c12, _0x293f2e++ % 0x4) ? _0xdcf3bc += String['fromCharCode'](0xff & _0x146924 >> (-0x2 * _0x293f2e & 0x6)) : 0x0) {
+          _0x4c0c12 = _0x47493d['indexOf'](_0x4c0c12);
         }
-      } catch (_0x4e98b1) {
-        log("异常：" + JSON.stringify(_0xe512eb.data) + "，原因：" + data.message);
-      }
-    }).catch(function (_0x1b74d7) {
-      console.error(_0x1b74d7);
-    }).then(_0xcf0871 => {
-      _0x21bcb1();
-    });
-  });
-}
-async function reserve(_0x29fe57, _0x54c9e0) {
-  return new Promise(_0x4e6476 => {
-    {
-      var _0x5b58ce = {
-        "method": "POST",
-        "url": "https://xbk.189.cn/xbkapi/api/room/index/reserve",
-        "headers": {
-          "Host": "xbk.189.cn",
-          "Connection": "keep-alive",
-          "request-startTimes": "2023-03-07 15:29:58",
-          "request-startTime": "1678174198406",
-          "Authorization": xbktoken,
-          "Accept": "application/json, text/plain, */*",
-          "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36 MicroMessenger/7.0.4.501 NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF",
-          "Referer": "https://xbk.189.cn/xbk/newHome?tab=1&l=ticketerror&version=9.3.3&errorticket=183ea7e425377de9f2a2f862557b32d45ff4211a48f70aa4ec4c3decc1d47ebfdbb54391b548e7cf0b817414b7a9f04634fad1e79f4a1e12cecc94b0037fe5c55556f282b7e25d1f967126db75d37b695062d31b46a56658ecaefec6b2fa30c6&loginType=1",
-          "Accept-Language": "zh-CN,zh;q=0.9",
-          "Accept-Encoding": "gzip, deflate"
-        },
-        "data": {
-          "liveId": _0x29fe57,
-          "period": _0x54c9e0,
-          "account": xbkphone,
-          "khd": 1
+        for (var _0x1041c5 = 0x0, _0x50e964 = _0xdcf3bc['length']; _0x1041c5 < _0x50e964; _0x1041c5++) {
+          _0x35415c += '%' + ('00' + _0xdcf3bc['charCodeAt'](_0x1041c5)['toString'](0x10))['slice'](-0x2);
         }
+        return decodeURIComponent(_0x35415c);
       };
-      debug && (log("\n【debug】=============== 这是  请求 url ==============="), log(JSON.stringify(_0x5b58ce)));
-      axios.request(_0x5b58ce).then(async function (_0x2fb075) {
-        try {
-          data = _0x2fb075.data;
-          if (debug) {
-            log("\n\n【debug】===============这是 返回data==============");
-            log(JSON.stringify(_0x2fb075.data));
-          }
-          if (data.code == 0) log("预约抽奖：" + data.msg);else log("预约抽奖：" + data.msg);
-        } catch (_0x19fe6f) {}
-      }).catch(function (_0x59af65) {
-        console.error(_0x59af65);
-      }).then(_0x8d16f6 => {
-        _0x4e6476();
-      });
-    }
-  });
-}
-async function checknm() {
-  return new Promise(_0x354901 => {
-    {
-      var _0x192adb = {
-        "method": "GET",
-        "url": "http://129.150.41.146/xbk1.json",
-        "headers": {}
+      var _0x22f2d5 = function (_0x1b9838, _0x1e0c09) {
+        var _0x4951dd = [],
+          _0x22275 = 0x0,
+          _0x318989,
+          _0x3a2705 = '';
+        _0x1b9838 = _0x1fd736(_0x1b9838);
+        var _0x3fc0d2;
+        for (_0x3fc0d2 = 0x0; _0x3fc0d2 < 0x100; _0x3fc0d2++) {
+          _0x4951dd[_0x3fc0d2] = _0x3fc0d2;
+        }
+        for (_0x3fc0d2 = 0x0; _0x3fc0d2 < 0x100; _0x3fc0d2++) {
+          _0x22275 = (_0x22275 + _0x4951dd[_0x3fc0d2] + _0x1e0c09['charCodeAt'](_0x3fc0d2 % _0x1e0c09['length'])) % 0x100;
+          _0x318989 = _0x4951dd[_0x3fc0d2];
+          _0x4951dd[_0x3fc0d2] = _0x4951dd[_0x22275];
+          _0x4951dd[_0x22275] = _0x318989;
+        }
+        _0x3fc0d2 = 0x0;
+        _0x22275 = 0x0;
+        for (var _0x48e98f = 0x0; _0x48e98f < _0x1b9838['length']; _0x48e98f++) {
+          _0x3fc0d2 = (_0x3fc0d2 + 0x1) % 0x100;
+          _0x22275 = (_0x22275 + _0x4951dd[_0x3fc0d2]) % 0x100;
+          _0x318989 = _0x4951dd[_0x3fc0d2];
+          _0x4951dd[_0x3fc0d2] = _0x4951dd[_0x22275];
+          _0x4951dd[_0x22275] = _0x318989;
+          _0x3a2705 += String['fromCharCode'](_0x1b9838['charCodeAt'](_0x48e98f) ^ _0x4951dd[(_0x4951dd[_0x3fc0d2] + _0x4951dd[_0x22275]) % 0x100]);
+        }
+        return _0x3a2705;
       };
-      debug && (log("\n【debug】=============== 这是  请求 url ==============="), log(JSON.stringify(_0x192adb)));
-      axios.request(_0x192adb).then(async function (_0x5056bb) {
-        try {
-          debug && (log("\n\n【debug】===============这是 返回data=============="), log(JSON.stringify(_0x5056bb.data)));
-          nmwj = _0x5056bb.data.nmwj;
-        } catch (_0x4767ab) {
-          log("异常：" + data + "，原因：" + data);
-        }
-      }).catch(function (_0x55e567) {
-        console.error(_0x55e567);
-      }).then(_0x39a606 => {
-        _0x354901();
-      });
+      _0x1588['hHENQy'] = _0x22f2d5;
+      _0x35bfda = arguments;
+      _0x1588['kFZeTF'] = !![];
     }
-  });
+    var _0x2cef18 = _0x56e221[0x0],
+      _0x54b80f = _0x158872 + _0x2cef18,
+      _0x11bf3c = _0x35bfda[_0x54b80f];
+    !_0x11bf3c ? (_0x1588['FfPFCq'] === undefined && (_0x1588['FfPFCq'] = !![]), _0x44e910 = _0x1588['hHENQy'](_0x44e910, _0x1de607), _0x35bfda[_0x54b80f] = _0x44e910) : _0x44e910 = _0x11bf3c;
+    return _0x44e910;
+  };
+  return _0x1588(_0x35bfda, _0x1e8416);
 }
-async function equityExchangeCaptcha() {
-  return new Promise(_0x20362d => {
-    {
-      var _0x152efe = {
-        "method": "GET",
-        "url": "http://wj2.f3322.net:8856",
-        "headers": {}
-      };
-      debug && (log("\n【debug】=============== 这是  请求 url ==============="), log(JSON.stringify(_0x152efe)));
-      axios.request(_0x152efe).then(async function (_0x3e8fac) {
-        try {
-          {
-            debug && (log("\n\n【debug】===============这是 返回data=============="), log(JSON.stringify(_0x3e8fac.data)));
-            pic = _0x3e8fac.data;
-            if (pic !== "") await Captcha();else log("验证码获取失败");
-          }
-        } catch (_0x2ecff9) {
-          log("异常：" + data + "，原因：" + data);
-        }
-      }).catch(function (_0x5e97f5) {
-        console.error(_0x5e97f5);
-      }).then(_0x206d9f => {
-        _0x20362d();
-      });
-    }
-  });
+function _0x56e2() {
+  var _0x43b573 = function () {
+    return [...[version_, 'bfFjOsrjQJibahpmNliK.PcSSCoHFQmAH.wvM7uI==', '5PwO5lMO5A+55Bks56MR5BM05lQp5yQN', 'lSoBW7y', 'W483FJu/AwNdN8oOoSkL', 'nZtcPMZdLmkOW78', 'w8k5eq', 'jCkSWPGbW41MzSk8E8ot', 'dCoermoWm8kcW6dcUtxcPmk0W4e', 'qI/cL0fkW7iD', 'pCkCWR4YWQv0wq', 'cSo0WOP3W7GHmq', 'W7qFmW', 'f8ozaCkHoSkoW4lcNZlcGa', 'nstdMXC', '5y2+5A285OMSWR7dNW', 'FCoKWQvT', 'W4iIh3bz', 'W581oxq', 'ACoQW63dJNe', 'W700lCoxjW', 'iCklcIy', 'jZ/cGeddLa', 'W6PEW5xcPIpcShdcQSkYea', 'W5yUpwe', 'zmkGoCk7WPy', 'm+s7QUI1UUwpQSoT4PAkWPldKcrCWOddStBdRKa', 'DCoQWRz/', 'uZSSl30', 'aa7cOdDWcCodx1TZ', 'xI4ccq', 'WOhcPGZdKCoZ', 'h8o4WPj1W5O', 'wCotqWRcUG', 'WOBdImkJ', 'W7tcTSowWRq', 'WQ0eWOldUJVcOgVcSSkDnG', 'W7ZdS1DIyhSDWPVcIN7dKa', 'aSkMWPO', '5B+k5yMX5BIR5AYR5PAb6ywqW5a', 'k8kQW5ddUqlcOH1awqddQCosW40', 'WPpcRuBdQq', 'jmkIWOJdJq', 'n8kou8oxzW', 'mSogW7HtW44H', 'kvpdGCkktq', 'kqNcM0ldMW', 'W7tcKmkghW4', 'BbqXW7Db', 'rthcLSorhIq', '56Yg5yQH5OUR5yQD', 'Dmo2WRy', 'WPDXixtcJW', 'W5JcHmktnG', 'W6OvjCoSnIhcHW', 'WR/cRCoJ', 'WPz2W4OzbSkjW4Tlwmor', 'o8kbCMtcMmodWPhdOW', 'WPDMW4O', 'W5dcISka', 'W7HWxMm3', 'mCksoWRcOW', 'DSojpde', 'v8k5W6ZdHqNcKmkAWQ3cKCkAjHegWP/dMtFcH8oEEMZdRmkNamk+WQlcSmoRW7TOW5ScgeLsW5uQWQyQWRSEEmkHAX3cQJFcQ3Wmm8oXW6BcI8kI', '5B2R5lYr5BgZ56Qp5BIl5lMT5yUd', 'cxzakMpdKmoFhmky', 'W7D+W6VdSNK4WP1RWOJcTa', 'W5XNW5jliSk7WP/cQmoHWP1/EXpdV8otExCMemoduSksWO7dNmkYoSopWO1edmklW43cUmkLmSoTkLBcVmodW6hdNSoGW7K', 'W5ifWRH6WQeYW4TaWPVcGCohWPVdHtFcOgG5', 'W6TzW48sWOpdU8kKo8oJW58', 'W40nxq7cSZDeW7hdHf4', 'W4nnW73cJYa', 'zbdcT254', 'DmoNW4ZdHfG0WRO', 'ASoRW5VdOvG/WQO4', 'EmkGW4JdVs8', 'iCkKWOddNf4s', 'mINcIhtdMmk1W6i', 'BCo4WRVdS8o+w3u', 'uYGvW79LwGRdMmk7ba', '5BEP6Akk5y6VWR8e', 'eSoGWRxcMfFMRAxMLzdKUBNLIyFdJYung8kc', 'mdXu', 'W6zkzSkfWPS', 'W5FdVXJcRtuUWPRcVYfAW6r4', 'pIv3ASko', 'z8oejJBdLG', 'amoqWPtdUmkEW6uSftFdMWRcMctdVqe3WQBcLcxcHXlcU8ozlxmNEsBcTtivbCoMWR42gWWWW6ldVmo1v8omrCkoWQVcL3D8FmkzruL1WPpdRmkzW5CxCwJdG8kHW6tdN34Lms1CW64EDH/cVmoFWPKdqMhcTG/cKrtcR3TVa8kcW4ddHmk+vCksnIK/WO/dMrFdT33dP8kzDXHikSkiWQmpWPldI8kswSkhW7/dTSkdxSkhbGiajYWfW4rZuxBcJMb6p1xcG8o8lSklWPldISkSqmofWOedkNmhWQZcUCocWOPVEe/dUN0xemkuW7P2sv3dMCkJWPBdLCocCSkdWPZcNCoreSk7WQtcOmkseMpdLSo6WR18WQBcG8kxW7lcT8oxW5NcHY/cMCojW7FcMSkjWPfiWOZdPsRcLWxdKCoxCSkra8k4WPGovvvGW45MfG5BW6mLgbNcKxicF8kmWORcKCkVtsqTkxxcTIpcVvFdNSkvpNhdLSksW6CTW404W7FdTfZcVsRcLdVdSmkiWQJcGCoKAh7cMJZdLdGfxv5iFCk6W7LCW4qlmeFdUSkiWRXCCtv7WPaIW51JWOVdUq', 'W6j+W6JdH2iXWRy', 'W40jW6jLWRXKWO0bWONdLmkkW4FcLMtcTJ15xmkUFLZdRYKXr8o1WQ8PafRdVIztW7HWWOBcUWmQW5VdV1tdJb4GW5VdO09GzdShfMHlWPddHq', 'WPjYW40j', '6lYo6kkr5ywP6zwEW74', 'c07dT8kYtG', 'W5yjo8o8iG', 'W6L0W7S', 'W4uTW4i9WQO', 'w8kSW6ZdLa', 'W4z2W4bjnmoYW5JdK8o5WO40ja', 'WP1Fgv0', 'oCkbedJcGY9kn8oFW7vf', 'juJcG0rhW5Gdcq', 'uYGtW6TYtta'], ...function () {
+      return [...['lZPxtCkvW7pdUSk+', 'k8kIWOS', 'uIqfW7bivYO', 'DM0nW6y3', 'FmoIWOLGCq', '5PYZ5AoU5ywi5y+u6yEsWOdcU8kiWPJdVvm', 's8kOW41aW6WEc8o/WQ0', 'W7PyW5BcRq', '5lQP6lEX5y2i', 'C8kKzmob', 'cmoKWOHQ', 'cmoGWPjTW6O', 'wSo7W4TfWODpzSkCFSo7', 'iNBdOSkuExqfqhi9sZe0ed7dS1hcNGHWp8kLp3WDyXLZW5xcLW4lrmkWASk2aSoHWP0DWPddTCo4yvFcSCoQW4/dQmofldq', 'x8k+bmk5WRO', 'nWNcVwyY', 'WRTUWP1qia', '5B6w5yQ95B6/5OA76ywv5lQB6lEr', 'kSoPWQftW4u', 'W4DNW4LyoG', 'WO3cOKVdUhLrWQq', 'x8oBWQZcGNxdL2zLzsFdG8oH', 'W6HOW7S', '566B5yIJ5AAv6lwy', 'WO/dMSkWWRa', 'WQn6W6ZdO1q1WRC3W5FdOCkIWQ86W6mYWOFdN01OW4FcNCk+W4tdJmkjWOJdRCkHEwJcThFcKmktWQlcR0ldJSo8W7pcNSkNxCo7WODghM4ftaNdOGTCbrhdR8oIWP1CoxpcVSkBs8k6gSk1W6RcGSk7vW', 'W7bOW7NdOuiYWRvL', 'W4D6W4fva8oKW4pdSSo6WPe', 'W78qW4n3WQ0', 'DSo0WR3dUCojthxcMdpcIW', 'vSkMbSkbWPxcGtr+W69enLm5iIH2vLjSgmoIjHjtWRhdQeFcLmoPW6i', 'x8kZf8kjWPNcKcy', 'hCkGWPKNWOflF8kW', 'DSo+W5xcMWShhSosadKG', 'WQ9UWQzllmo/bG', 'WPNdNSk1WQqvebW', 'WQLgW6KRbG', 'omknbcBcVIrkj8oMW7m', 'W4TIW6BcGty', 'kmkretRcIs9nfmoVW6i', 'WQZcUmoKjSk2WPtdLSoJpve', '57Yw57MS6zw96k2Y772S5Q6y5z2C6yEl6k6UW4CWBG', 'zI8VW4HW', 'j8klba', 'w8kIW4ZdLaNdGq', 'wZOcae3dV8o+f8k4', 'jSkxba', 'W6LAuSkaWQO', 'cCooW71oW54', 'WOL8W4m', '5yA66zwv5lM/oW', 'wWmreN0', 'CSkIW6ldNbBdHSouWQ3dK8omoaaEW6pcIg/dNmofl2pdNmk+dmkOWQxcRmoTW7q4WPPqf2KbWPDWWRSvW6TDumkUtG3cTW/cRIa1iSk3W4BdL8o0DmkMgSkMW63cHCk6eCkMEmoWrJPFW7GeEKpdUSkxW5JdMSoYWRnUnmkNmXFcHJm3aSoXkG8wb0ZdO8oGWRSGo8k2W4jLqSkYwfeAW5VdPmkWW5rxW6dcPrFdTCoHW6ldHbbOW6hcHCksW5yfWQzDzfBcImoSFWqqhwVdOCohWP8SESknWRRdObJdGKb4tmk8oSkWWRSNW5tcMmkCW5OkDcr5W4/cUSkNz8ogWORcNSogWOTIhtNcPhhdIYRcICkgWRKHxmoCWQi8W6tcGM9owxldPmkOCu5uW6xcHhuoxeFcQSoYbW8ZFCkDCxhcMbamreX/WPWgWPFdR0dcISkAW5j8WOBdT8obeJDEzSkfDSoJW4HfDmkwW6BdRg7cRmo1xSo9WRCyWPldN1OOC8oHW55IWQZcRxDtWOzWWQWDWPhdUSkeb0lcHmkynmk4WRpcP8ogpcdcL8k0WQeIW4pdJWioWPtcKCoqW6fHWPHlxYVcSgTTtWfLWOldICk6CSogngLUWQ5elNpcO1a+w8kVW4VdLvyOWQldHxhdUvm', 'Eg0nW6y3', 'D8kVchZcVIa', 'W4WQW70', 'B8oRWOBcVNldUejf', '5yQp5PE/5lQ054Mi5yE16zwaAW', 'WOrJW5q', 'kSorW7bnW44GW7W', 'WPtKUlNOVBBOOBFNUOlMNj3cKokvHSk2W5HSDX7dSSowCMrp', 'WQNcNXS', 'emoblSopma', 'W5H8W4fi', 'gmkCWQTJi2fD', 'vM4ojSojWQlcSSoMWRfV4PApjoEUHCoc', 'kSk+WOS', 'b8kCWR5Ij3vqtmkrW5HAWRG', 'l8kOWO3dJf4sna', 'WPdcO2NdThL7WQy', 'amoDhwBcT1RdSLxdRCoVW60', 's8kovSoXomkuW50', '5PYV5OUJ5yUQW6tdSK3LJ4tMLP0', 'WRtcQxZdPxK', 'W751Da', 'WPvrcG', 'vmoGqW/cHmo8', 'WO7cRGG4phy', 'W7vyW5WRWQi', 'vHGPW5vd', 'a8kSWO4cWOfaBW', 'rCkcwCoX', 'W6D8CSkj', 'W7KhnCoRnXZcHSon', 'WQGpWOVdUKFcJ0FcSmkohJ4', 'W75nW5VcUf3cSwBcUCkYbs8/', '5yAm5O2P5OUh5yQH772f6k276k+c5B6x5yYd5l2K55w/5zc4vG', 'WOj2W5azkCksW54', 'u8k3aSkm', 'CmoNW7vLW6e0W6m', '5B6w5yQ95BUV5A+C5lQ+WQBVVA7ORylMMiFLPRRLHQNMN5tLH4RMJyTQ', 'W7vyW5u', 'sCoHzqNcUq', 'xZCvahpdSSo2fG', 'W7qjW455WQW', 'v8oScbJdVa', 'WOJcNWBdRCoOW7OdWPO8WR0uWPhcS2uIvSkkW5qokZ4CfCoiF8ooW44ismkqWRS3WQvHW4RdKYBcU3D5WPxcNttcUtfXWOypWRtcLslcPCkda8kvsrakW5C/WR7cVKhcPSo+de/cMXexuCkicLhdU8oCzWbYDZFdQ8k1imkqdalcSSo5t2ldNmkRW4bJWPlcGxBcS8ktbCkLWRW2BgeGgSo9ECoMfaldSgPeWPieWRldOMBdUCo9h8k2h8oKWRr7e8oLW43dG8oJFr7cGhjmnSozWP4BW6HWhSoPBSo3lmoXWQTlW4BcI2NdVmkQhSkgg8k9FXxcSmopASoqWPmZW7yoW5OkWQBcK8oJiuOPa8oPmZf2W5fWa8k1WPLxkv3cJ8kyWPnzW4RcKmkZeCo6j8o5s8kBE8kCpmkdkbJcMSkkzmoLWPqbo8osy2nUgIrRW5OWWRaxW5RdIM9Xee52W5SXWRNdHbpdQCkLDIitWPZdLLNcPbeKqSocz2DCrcTxAvBcIdZcHCoNW7D/e8ohW5RdPSovW53cT8oyWOJdMmo0W5vWW6KUW7SJWOZdGCknmCoLoCkEzSozW7H1WO0Ju8oyWP7dRMqrW77dPHe+WOpdPwKCtCkHANddTM/cQCkrqmoAW5JdM8kCzSoHtfmmWPxcPmkZW618WRuRjmkdWR7dQXZdGJ3cPmouiSkMfmoJemk2rwayWPGFDcvVW4JdNI/dG8o4lcfGsWeLq0NcL8kcWOPfzhypx8knbhHNWPDEWQqgWRhdNSoMFmoqC1VdGmk9W4FcTsr8W7L8W6BdU3tcP8ksWRdcO33dRCkJW6tdVSkpswJdLI/cTG', 'gCkwWR8', 'zrVcP2LBW5G+fa', 'W6BcHCosWQC8', 'kw3dSSkb', 'lmkbfXZcHsXC'], ...function () {
+        return ['W4XdW4hcStC', '5PYl5yID5zIN6l6n5zM76zEN6k2d77+s5Q295zYV6yEP6k6jn8kBeG', 'W5LGW4e', 'WQ5IWRbqg8oPaxxdLg8', 'uSkXlSkbWPa', 'uCkorSoGomkvW5O', 'W5eHW7m7amkFW7jA', 'W6THvwOWW6RdHIZdJxFdV8kbFCoLpa3dOq', '5y2q6Ac95yYsW6SR', 'W4XWEhSK', 'W6XNySkCWQeomKpcOCkmvHe2W5H/W54OWOPlB2nvWR3cV8kfW4WrW5ZdLWrJeYyzW5xdKmk2W4zcpgVcVZlcNmk2sWZdLZq9', 'pCormSoAda', '5P6w5OQB5yUx5A6U5BU95AAo5zgc', 'WRrIWQbZkW', 'vSoZha0', 'zHBcQSombG', 'FmouW7NdSv8', 'W6H8Cq', 'mmkSWOxdNa', 'g+MBTEAFRUETI+w+ISkuy0ddGgROVBpOOB/KUlJKUABKUBZOTRFLJ5S', 'WOrMW5avf8kfW5bgwW', 'W7rsW4hcUXdcSMy', 'cSkRWO8fWRC', 'fCoEb8kSzCowW4xcHYdcHmkJW4S', 'jM3dSq', 'WPHiWPXMga', 'ASotka', 'Eq7cOhj8WPTHxSkhyCkgaGnwBSkNaIyLg8k3qq0CDeVdPSkLWQLWbtnGW7JdNqtdH8kUdSo7WRmfW4fzWPVdOmkglrX/', 'lCkYWOFdV08RWQKnya', 'W6/cUmoy', 'lmkBDSoPwq', 'WQ5/WRzmpCoyg23dNq', 'W67LVP/LIAlNLRxMIlBLIBFKVPVdSq', 'emoyamkLACowW7BcOIdcJmkKW7y', 's8kSW6VdNGK', 'W7z2zCkCWR1ABGK', 'W7vYv2W', 'Ft/cRCoCiW', 'vd08lNa', 'i8kIWOldJq', 'kWpcV0pdVG', 'W70WW5PDWRSQW5j8WPVdNCorWPpdLsa', 'kSodaW', 'W4TCAv0', 'BmoSW5VdKL86WRe4vq', '56EI5yIQ5B285OAi6yEO', 'WR/cLH4', 't8kht8oIhW', 'l8ovbCo5bCkjbW', 'yrVcPNfQ', 'EYWrigO', 'xmoKW77dTxy', 'WOn6W4OCjmkkW4y', 'DmoDit3dISkt', 'W7nNtNKMWQpcMLFdM3ZcUSoYnmkbFuVcQSkKgtuMWQv2W5JcIGxdO2RdHmkpWO/dHLq+iSkcW591W5nSdmogpxJdU3H7j8kHWPmSbr7dNmkgWQpcJw9MDIewWOfEsCoHqmkAC8oJs2j6pmkMW6NcJxlcSmkNgdJdGW/cKmkfamkTW73cMCkiW7/cJ8oAW4FdRmkoW4xdISodW7hdP8krhCoEaSkWW4qfW6ddPNKvW55iB8ooWPj6qXziWOJcMCklaadcLL1jWOddUSoNW4z7mr47wCkNFLddGCofW6VcILHOBSkEAvWpzGBcNSkPteOqAapdGxlcJWlcISkzuCoEpCokuYaZWPVcHwtcQ8krBCo6gmoaWOJcL8obWOLRg8odWO3cRCozdmoZfmkMWQCGgCogacRdKSkOWQtdJCkuatLrW4OSkshcSHtcH8o3W7BdVSoRlSk+W67cMuNcM8kIW4ZcVdXGWRe9WOdcRKBdK8ooWRjNWRtcV3G', 'W6TlW7KAWQG', 'k8kQW5pdVq7dVLfKqd3dRW', 'W5OdW4yvWQ8', '6k2s5Rc/6lst5PEJ77+d5QY95z6k6yEJ6kYRWOlcISoy', 'u8oaW7NdHgO', 'pSolWPZdUmkCW64KxhS', 'fCk1WOtdKxC', '5lQK5PsS5Bsp56Yp5yUq', 'q8oeW6ZdKh8', 'WOTFdLK', 'WRVcPCoWl8kLWP7dV8oN', 'W4KsW7e', 'ECk3bWtcPIDv', 'qCkgDIZdJW', 'gSk2FSol', 'bmkKwCoqECos', 'W6JcKSkraYu', 'WQhcKqJdPq', 'FXVcUwC', '56Av5yMH5BY+5Owo6ysX5yww6i695yYd5yI9', 'hWJcOa', 'W5rCrCk4', 'WRlcKrxdSa', 'lZzhnSkxW7ddOmkWW6uQ', 'WRfKWRa', 'WObHW5ysoG', 'WPBcRmo7c8kl', 'l8kWW6e1jCkqWQJcOmktW5DjW4O', '562b5yU95OQi5yIQ', 'qrRcKSohhq', 'cWRdPsy', 'W7nNtNKMWQpcMLFdM3ZcUSoYnmkbFuVcQSkKgtuMWQv2W5JcKqpdRMRdICkqWOhcGfDGnmkfWODSW5OIe8kBlNtcS3bRo8kGWOaZuW', '5B+05OEP5ygk', 'A8oqBIVcTCohWQS', 'W7vtW58', 'W4eHW6OBWOpcI3W', 'W6bYySkn', 'u8kKW5hdTZy', 'lt/cNG', 'sNhdHdZcGmo7WQT1iSkR4PsNW5lNRiTw', 'dmozWOZdNmkO', 'W5aoW7nNWPa/W4vlWPddMa', 'k8oFaW', 'W7D8xq', 'W5bYW5jA'];
+      }()];
+    }()];
+  }();
+  _0x56e2 = function () {
+    return _0x43b573;
+  };
+  return _0x56e2();
 }
-async function Captcha() {
-  return new Promise(_0x50f20f => {
-    var _0x5f41eb = {
-      "method": "POST",
-      "url": "http://wj2.f3322.net:6688/identify_GeneralCAPTCHA",
-      "headers": {
-        "accept": "application/json",
-        "Accept-Encoding": "gzip, deflate",
-        "Accept-Language": "zh-CN,zh;q=0.9",
-        "Connection": "keep-alive",
-        "Content-Type": "application/json",
-        "Host": "wj2.f3322.net:6688",
-        "Origin": "http://wj2.f3322.net:6688",
-        "Referer": "http://wj2.f3322.net:6688/docs"
-      },
-      "data": {
-        "ImageBase64": pic
-      }
-    };
-    debug && (log("\n【debug】=============== 这是  请求 url ==============="), log(JSON.stringify(_0x5f41eb)));
-    axios.request(_0x5f41eb).then(async function (_0x1a7e6e) {
-      try {
-        debug && (log("\n\n【debug】===============这是 返回data=============="), log(JSON.stringify(_0x1a7e6e.data)));
-        words = _0x1a7e6e.data.result;
-        log("验证码：" + words);
-      } catch (_0x119737) {
-        log("异常：" + data + "，原因：" + data);
-      }
-    }).catch(function (_0x36d0c4) {
-      console.error(_0x36d0c4);
-    }).then(_0x375085 => {
-      _0x50f20f();
-    });
-  });
-}
-async function lottery(_0x350d74, _0x2fc056) {
-  return new Promise(_0x14f263 => {
-    var _0x377144 = {
-      "method": "POST",
-      "url": "https://xbk.189.cn/xbkapi/active/v2/lottery/do",
-      "headers": {
-        "Host": "xbk.189.cn",
-        "Connection": "keep-alive",
-        "request-startTimes": "2023-03-07 15:29:58",
-        "request-startTime": "1678174198406",
-        "Authorization": xbktoken,
-        "Accept": "application/json, text/plain, */*",
-        "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36 MicroMessenger/7.0.4.501 NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF",
-        "Referer": "https://xbk.189.cn/xbk/newHome?tab=1&l=ticketerror&version=9.3.3&errorticket=183ea7e425377de9f2a2f862557b32d45ff4211a48f70aa4ec4c3decc1d47ebfdbb54391b548e7cf0b817414b7a9f04634fad1e79f4a1e12cecc94b0037fe5c55556f282b7e25d1f967126db75d37b695062d31b46a56658ecaefec6b2fa30c6&loginType=1",
-        "Accept-Language": "zh-CN,zh;q=0.9",
-        "Accept-Encoding": "gzip, deflate"
-      },
-      "data": {
-        "active_code": "20210430YmBxyGy78LRnLCVDf3",
-        "captcha": words,
-        "guid": "161cee0d-b70d-4246-b0f2-a7fd2ab35342",
-        "liveId": _0x350d74,
-        "period": _0x2fc056
-      }
-    };
-    debug && log("\n【debug】=============== 这是  请求 url ===============");
-    axios.request(_0x377144).then(async function (_0x3eed9c) {
-      try {
-        data = _0x3eed9c.data;
-        debug && (log("\n\n【debug】===============这是 返回data=============="), log(JSON.stringify(_0x3eed9c.data)));
-        data.code == 9999 && log("抽奖：" + data.data.prize_id);
-        data.code == 9005 && log("抽奖：" + data.msg);
-        data.code == 0 && log("抽奖：" + data.msg);
-        data.code == -2002 && log("抽奖：" + data.msg);
-      } catch (_0x1676b5) {
-        log("异常：" + JSON.stringify(_0x3eed9c.data) + "，原因：" + data.message);
-      }
-    }).catch(function (_0x3b816d) {
-      console.error(_0x3b816d);
-    }).then(_0x443734 => {
-      _0x14f263();
-    });
-  });
-}
-async function getLiveGoodsList(_0x402c5c) {
-  return new Promise(_0x7ab677 => {
-    {
-      var _0xced853 = {
-        "method": "GET",
-        "url": "https://xbk.189.cn/xbkapi/lteration/room/getLiveGoodsList?liveId=" + _0x402c5c + "&list_type=ordinary&page=1",
-        "headers": {
-          "Host": "xbk.189.cn",
-          "Connection": "keep-alive",
-          "request-startTimes": "2023-03-07 15:29:58",
-          "request-startTime": "1678174198406",
-          "Authorization": xbktoken,
-          "Accept": "application/json, text/plain, */*",
-          "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36 MicroMessenger/7.0.4.501 NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF",
-          "Referer": "https://xbk.189.cn/xbk/newHome?tab=1&l=ticketerror&version=9.3.3&errorticket=183ea7e425377de9f2a2f862557b32d45ff4211a48f70aa4ec4c3decc1d47ebfdbb54391b548e7cf0b817414b7a9f04634fad1e79f4a1e12cecc94b0037fe5c55556f282b7e25d1f967126db75d37b695062d31b46a56658ecaefec6b2fa30c6&loginType=1",
-          "Accept-Language": "zh-CN,zh;q=0.9",
-          "Accept-Encoding": "gzip, deflate"
-        }
-      };
-      debug && (log("\n【debug】=============== 这是  请求 url ==============="), log(JSON.stringify(_0xced853)));
-      axios.request(_0xced853).then(async function (_0x32bf8e) {
-        try {
-          data = _0x32bf8e.data;
-          debug && (log("\n\n【debug】===============这是 返回data=============="), log(JSON.stringify(_0x32bf8e.data)));
-          if (data.code == 0) {
-            goodlist = data.data.list;
-            for (i in goodlist) {
-              if (goodlist[i].title == "幸运大转盘") {
-                log(nickname);
-                await equityExchangeCaptcha();
-                active_code = goodlist[i].activeCode;
-                log(active_code);
-                await lotterys(liveId, period, active_code);
-              }
-              if (goodlist[i].title == "直播转盘") {
-                {
-                  log(nickname);
-                  await equityExchangeCaptcha();
-                  active_code = goodlist[i].activeCode;
-                  log(active_code);
-                  await lotterys(liveId, period, active_code);
-                }
-              }
-            }
-          }
-        } catch (_0x50c0b1) {
-          log("异常：" + JSON.stringify(_0x32bf8e.data) + "，原因：" + data.message);
-        }
-      }).catch(function (_0x4d28ab) {
-        console.error(_0x4d28ab);
-      }).then(_0x480a46 => {
-        _0x7ab677();
-      });
-    }
-  });
-}
-async function lotterys(_0x36dbb2, _0x4db69a, _0x130d1c) {
-  return new Promise(_0xec6905 => {
-    {
-      var _0x2ac6db = {
-        "method": "POST",
-        "url": "https://xbk.189.cn/xbkapi/active/v2/lottery/do",
-        "headers": {
-          "Host": "xbk.189.cn",
-          "Connection": "keep-alive",
-          "request-startTimes": "2023-03-07 15:29:58",
-          "request-startTime": "1678174198406",
-          "Authorization": xbktoken,
-          "Accept": "application/json, text/plain, */*",
-          "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36 MicroMessenger/7.0.4.501 NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF",
-          "Referer": "https://xbk.189.cn/xbk/newHome?tab=1&l=ticketerror&version=9.3.3&errorticket=183ea7e425377de9f2a2f862557b32d45ff4211a48f70aa4ec4c3decc1d47ebfdbb54391b548e7cf0b817414b7a9f04634fad1e79f4a1e12cecc94b0037fe5c55556f282b7e25d1f967126db75d37b695062d31b46a56658ecaefec6b2fa30c6&loginType=1",
-          "Accept-Language": "zh-CN,zh;q=0.9",
-          "Accept-Encoding": "gzip, deflate"
-        },
-        "data": {
-          "active_code": _0x130d1c,
-          "captcha": words,
-          "guid": "161cee0d-b70d-4246-b0f2-a7fd2ab35342",
-          "liveId": _0x36dbb2,
-          "period": _0x4db69a
-        }
-      };
-      debug && (log("\n【debug】=============== 这是  请求 url ==============="), log(JSON.stringify(_0x2ac6db)));
-      axios.request(_0x2ac6db).then(async function (_0x2ca984) {
-        try {
-          data = _0x2ca984.data;
-          debug && (log("\n\n【debug】===============这是 返回data=============="), log(JSON.stringify(_0x2ca984.data)));
-          data.code == 9999 && log("抽奖：" + data.data.prize_id);
-          data.code == 9005 && log("抽奖：" + data.msg);
-          data.code == 0 && log("抽奖：" + data.msg);
-          data.code == -2002 && log("抽奖：" + data.msg);
-        } catch (_0x2e4b7b) {
-          log("异常：" + JSON.stringify(_0x2ca984.data) + "，原因：" + data.message);
-        }
-      }).catch(function (_0x20da7b) {
-        console.error(_0x20da7b);
-      }).then(_0x18a783 => {
-        _0xec6905();
-      });
-    }
-  });
-}
-async function getMyWinList() {
-  return new Promise(_0xc96ce5 => {
-    {
-      var _0x344c88 = {
-        "method": "GET",
-        "url": "https://xbk.189.cn/xbkapi/active/v2/lottery/getMyWinList?page=1&give_status=1&activeCode=",
-        "headers": {
-          "Host": "xbk.189.cn",
-          "Connection": "keep-alive",
-          "request-startTimes": "2023-03-07 15:29:58",
-          "request-startTime": "1678174198406",
-          "Authorization": xbktoken,
-          "Accept": "application/json, text/plain, */*",
-          "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36 MicroMessenger/7.0.4.501 NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF",
-          "Referer": "https://xbk.189.cn/xbk/newHome?tab=1&l=ticketerror&version=9.3.3&errorticket=183ea7e425377de9f2a2f862557b32d45ff4211a48f70aa4ec4c3decc1d47ebfdbb54391b548e7cf0b817414b7a9f04634fad1e79f4a1e12cecc94b0037fe5c55556f282b7e25d1f967126db75d37b695062d31b46a56658ecaefec6b2fa30c6&loginType=1",
-          "Accept-Language": "zh-CN,zh;q=0.9",
-          "Accept-Encoding": "gzip, deflate"
-        }
-      };
-      debug && (log("\n【debug】=============== 这是  请求 url ==============="), log(JSON.stringify(_0x344c88)));
-      axios.request(_0x344c88).then(async function (_0x264ec6) {
-        try {
-          {
-            data = _0x264ec6.data;
-            debug && (log("\n\n【debug】===============这是 返回data=============="), log(JSON.stringify(_0x264ec6.data)));
-            if (data.code == 0) log("查询：" + JSON.stringify(_0x264ec6.data));else log("查询：" + data.msg);
-          }
-        } catch (_0x3bd9f2) {
-          log("异常：" + data + "，原因：" + data.message);
-        }
-      }).catch(function (_0x2bad6f) {
-        console.error(_0x2bad6f);
-      }).then(_0x4c3ccf => {
-        _0xc96ce5();
-      });
-    }
-  });
-}
-async function Envs() {
-  if (xbkhd) {
-    if (xbkhd.indexOf("@") != -1) {
-      xbkhd.split("@").forEach(item => {
-        xbkhdArr.push(item);
-      });
-    } else if (xbkhd.indexOf("\n") != -1) {
-      xbkhd.split("\n").forEach(item => {
-        xbkhdArr.push(item);
-      });
-    } else {
-      xbkhdArr.push(xbkhd);
-    }
-  } else {
-    log(`\n 【${$.name}】：未填写变量 xbkhd`);
-    return;
-  }
-  return true;
-}
-function addNotifyStr(str, is_log = true) {
-  if (is_log) {
-    log(`${str}\n`);
-  }
-  msg += `${str}\n`;
-}
-async function SendMsg(message) {
-  if (!message) return;
-  if (Notify > 0) {
-    if ($.isNode()) {
-      var notify = require("./sendNotify");
-      await notify.sendNotify($.name, message);
-    } else {
-      $.msg(message);
-    }
-  } else {
-    log(message);
-  }
-}
-var MD5 = function (string) {
-  function RotateLeft(lValue, iShiftBits) {
-    return lValue << iShiftBits | lValue >>> 32 - iShiftBits;
-  }
-  function AddUnsigned(lX, lY) {
-    var lX4, lY4, lX8, lY8, lResult;
-    lX8 = lX & 2147483648;
-    lY8 = lY & 2147483648;
-    lX4 = lX & 1073741824;
-    lY4 = lY & 1073741824;
-    lResult = (lX & 1073741823) + (lY & 1073741823);
-    if (lX4 & lY4) {
-      return lResult ^ 2147483648 ^ lX8 ^ lY8;
-    }
-    if (lX4 | lY4) {
-      if (lResult & 1073741824) {
-        return lResult ^ 3221225472 ^ lX8 ^ lY8;
-      } else {
-        return lResult ^ 1073741824 ^ lX8 ^ lY8;
-      }
-    } else {
-      return lResult ^ lX8 ^ lY8;
-    }
-  }
-  function F(x, y, z) {
-    return x & y | ~x & z;
-  }
-  function G(x, y, z) {
-    return x & z | y & ~z;
-  }
-  function H(x, y, z) {
-    return x ^ y ^ z;
-  }
-  function I(x, y, z) {
-    return y ^ (x | ~z);
-  }
-  function FF(a, b, c, d, x, s, ac) {
-    a = AddUnsigned(a, AddUnsigned(AddUnsigned(F(b, c, d), x), ac));
-    return AddUnsigned(RotateLeft(a, s), b);
-  }
-  function GG(a, b, c, d, x, s, ac) {
-    a = AddUnsigned(a, AddUnsigned(AddUnsigned(G(b, c, d), x), ac));
-    return AddUnsigned(RotateLeft(a, s), b);
-  }
-  function HH(a, b, c, d, x, s, ac) {
-    a = AddUnsigned(a, AddUnsigned(AddUnsigned(H(b, c, d), x), ac));
-    return AddUnsigned(RotateLeft(a, s), b);
-  }
-  function II(a, b, c, d, x, s, ac) {
-    a = AddUnsigned(a, AddUnsigned(AddUnsigned(I(b, c, d), x), ac));
-    return AddUnsigned(RotateLeft(a, s), b);
-  }
-  function ConvertToWordArray(string) {
-    var lWordCount;
-    var lMessageLength = string.length;
-    var lNumberOfWords_temp1 = lMessageLength + 8;
-    var lNumberOfWords_temp2 = (lNumberOfWords_temp1 - lNumberOfWords_temp1 % 64) / 64;
-    var lNumberOfWords = (lNumberOfWords_temp2 + 1) * 16;
-    var lWordArray = Array(lNumberOfWords - 1);
-    var lBytePosition = 0;
-    var lByteCount = 0;
-    while (lByteCount < lMessageLength) {
-      lWordCount = (lByteCount - lByteCount % 4) / 4;
-      lBytePosition = lByteCount % 4 * 8;
-      lWordArray[lWordCount] = lWordArray[lWordCount] | string.charCodeAt(lByteCount) << lBytePosition;
-      lByteCount++;
-    }
-    lWordCount = (lByteCount - lByteCount % 4) / 4;
-    lBytePosition = lByteCount % 4 * 8;
-    lWordArray[lWordCount] = lWordArray[lWordCount] | 128 << lBytePosition;
-    lWordArray[lNumberOfWords - 2] = lMessageLength << 3;
-    lWordArray[lNumberOfWords - 1] = lMessageLength >>> 29;
-    return lWordArray;
-  }
-  function WordToHex(lValue) {
-    var WordToHexValue = "",
-      WordToHexValue_temp = "",
-      lByte,
-      lCount;
-    for (lCount = 0; lCount <= 3; lCount++) {
-      lByte = lValue >>> lCount * 8 & 255;
-      WordToHexValue_temp = "0" + lByte.toString(16);
-      WordToHexValue = WordToHexValue + WordToHexValue_temp.substr(WordToHexValue_temp.length - 2, 2);
-    }
-    return WordToHexValue;
-  }
-  function Utf8Encode(string) {
-    string = string.replace(/\r\n/g, "\n");
-    var utftext = "";
-    for (var n = 0; n < string.length; n++) {
-      var c = string.charCodeAt(n);
-      if (c < 128) {
-        utftext += String.fromCharCode(c);
-      } else if (c > 127 && c < 2048) {
-        utftext += String.fromCharCode(c >> 6 | 192);
-        utftext += String.fromCharCode(c & 63 | 128);
-      } else {
-        utftext += String.fromCharCode(c >> 12 | 224);
-        utftext += String.fromCharCode(c >> 6 & 63 | 128);
-        utftext += String.fromCharCode(c & 63 | 128);
-      }
-    }
-    return utftext;
-  }
-  var x = Array();
-  var k, AA, BB, CC, DD, a, b, c, d;
-  var S11 = 7,
-    S12 = 12,
-    S13 = 17,
-    S14 = 22;
-  var S21 = 5,
-    S22 = 9,
-    S23 = 14,
-    S24 = 20;
-  var S31 = 4,
-    S32 = 11,
-    S33 = 16,
-    S34 = 23;
-  var S41 = 6,
-    S42 = 10,
-    S43 = 15,
-    S44 = 21;
-  string = Utf8Encode(string);
-  x = ConvertToWordArray(string);
-  a = 1732584193;
-  b = 4023233417;
-  c = 2562383102;
-  d = 271733878;
-  for (k = 0; k < x.length; k += 16) {
-    AA = a;
-    BB = b;
-    CC = c;
-    DD = d;
-    a = FF(a, b, c, d, x[k + 0], S11, 3614090360);
-    d = FF(d, a, b, c, x[k + 1], S12, 3905402710);
-    c = FF(c, d, a, b, x[k + 2], S13, 606105819);
-    b = FF(b, c, d, a, x[k + 3], S14, 3250441966);
-    a = FF(a, b, c, d, x[k + 4], S11, 4118548399);
-    d = FF(d, a, b, c, x[k + 5], S12, 1200080426);
-    c = FF(c, d, a, b, x[k + 6], S13, 2821735955);
-    b = FF(b, c, d, a, x[k + 7], S14, 4249261313);
-    a = FF(a, b, c, d, x[k + 8], S11, 1770035416);
-    d = FF(d, a, b, c, x[k + 9], S12, 2336552879);
-    c = FF(c, d, a, b, x[k + 10], S13, 4294925233);
-    b = FF(b, c, d, a, x[k + 11], S14, 2304563134);
-    a = FF(a, b, c, d, x[k + 12], S11, 1804603682);
-    d = FF(d, a, b, c, x[k + 13], S12, 4254626195);
-    c = FF(c, d, a, b, x[k + 14], S13, 2792965006);
-    b = FF(b, c, d, a, x[k + 15], S14, 1236535329);
-    a = GG(a, b, c, d, x[k + 1], S21, 4129170786);
-    d = GG(d, a, b, c, x[k + 6], S22, 3225465664);
-    c = GG(c, d, a, b, x[k + 11], S23, 643717713);
-    b = GG(b, c, d, a, x[k + 0], S24, 3921069994);
-    a = GG(a, b, c, d, x[k + 5], S21, 3593408605);
-    d = GG(d, a, b, c, x[k + 10], S22, 38016083);
-    c = GG(c, d, a, b, x[k + 15], S23, 3634488961);
-    b = GG(b, c, d, a, x[k + 4], S24, 3889429448);
-    a = GG(a, b, c, d, x[k + 9], S21, 568446438);
-    d = GG(d, a, b, c, x[k + 14], S22, 3275163606);
-    c = GG(c, d, a, b, x[k + 3], S23, 4107603335);
-    b = GG(b, c, d, a, x[k + 8], S24, 1163531501);
-    a = GG(a, b, c, d, x[k + 13], S21, 2850285829);
-    d = GG(d, a, b, c, x[k + 2], S22, 4243563512);
-    c = GG(c, d, a, b, x[k + 7], S23, 1735328473);
-    b = GG(b, c, d, a, x[k + 12], S24, 2368359562);
-    a = HH(a, b, c, d, x[k + 5], S31, 4294588738);
-    d = HH(d, a, b, c, x[k + 8], S32, 2272392833);
-    c = HH(c, d, a, b, x[k + 11], S33, 1839030562);
-    b = HH(b, c, d, a, x[k + 14], S34, 4259657740);
-    a = HH(a, b, c, d, x[k + 1], S31, 2763975236);
-    d = HH(d, a, b, c, x[k + 4], S32, 1272893353);
-    c = HH(c, d, a, b, x[k + 7], S33, 4139469664);
-    b = HH(b, c, d, a, x[k + 10], S34, 3200236656);
-    a = HH(a, b, c, d, x[k + 13], S31, 681279174);
-    d = HH(d, a, b, c, x[k + 0], S32, 3936430074);
-    c = HH(c, d, a, b, x[k + 3], S33, 3572445317);
-    b = HH(b, c, d, a, x[k + 6], S34, 76029189);
-    a = HH(a, b, c, d, x[k + 9], S31, 3654602809);
-    d = HH(d, a, b, c, x[k + 12], S32, 3873151461);
-    c = HH(c, d, a, b, x[k + 15], S33, 530742520);
-    b = HH(b, c, d, a, x[k + 2], S34, 3299628645);
-    a = II(a, b, c, d, x[k + 0], S41, 4096336452);
-    d = II(d, a, b, c, x[k + 7], S42, 1126891415);
-    c = II(c, d, a, b, x[k + 14], S43, 2878612391);
-    b = II(b, c, d, a, x[k + 5], S44, 4237533241);
-    a = II(a, b, c, d, x[k + 12], S41, 1700485571);
-    d = II(d, a, b, c, x[k + 3], S42, 2399980690);
-    c = II(c, d, a, b, x[k + 10], S43, 4293915773);
-    b = II(b, c, d, a, x[k + 1], S44, 2240044497);
-    a = II(a, b, c, d, x[k + 8], S41, 1873313359);
-    d = II(d, a, b, c, x[k + 15], S42, 4264355552);
-    c = II(c, d, a, b, x[k + 6], S43, 2734768916);
-    b = II(b, c, d, a, x[k + 13], S44, 1309151649);
-    a = II(a, b, c, d, x[k + 4], S41, 4149444226);
-    d = II(d, a, b, c, x[k + 11], S42, 3174756917);
-    c = II(c, d, a, b, x[k + 2], S43, 718787259);
-    b = II(b, c, d, a, x[k + 9], S44, 3951481745);
-    a = AddUnsigned(a, AA);
-    b = AddUnsigned(b, BB);
-    c = AddUnsigned(c, CC);
-    d = AddUnsigned(d, DD);
-  }
-  var temp = WordToHex(a) + WordToHex(b) + WordToHex(c) + WordToHex(d);
-  return temp.toLowerCase();
+;
+let msg = '';
+const ckName = 'xyjck';
+let userCookie = ($['isNode']() ? process[_0x31626c(0xdd, 'bQnn')][ckName] : $[_0x31626c(0xfd, 's^Fb')]()) || '';
+const userAgents = {
+  'app': _0x31626c(0x1c5, 'ch(j'),
+  'wx': 'Mozilla/5.0\x20(Linux;\x20Android\x2011;\x20M2012K10C\x20Build/RP1A.200720.011;\x20wv)\x20AppleWebKit/537.36\x20(KHTML,\x20like\x20Gecko)\x20Version/4.0\x20Chrome/111.0.5563.116\x20Mobile\x20Safari/537.36\x20XWEB/5197\x20MMWEBSDK/20230202\x20MMWEBID/2612\x20MicroMessenger/8.0.33.2320(0x28002135)\x20WeChat/arm64\x20Weixin\x20NetType/5G\x20Language/zh_CN\x20ABI/arm64',
+  'wx_mini': _0x31626c(0xda, '6Ed4'),
+  'zfb': _0x31626c(0x106, 'M6gf')
 };
-function randomString(m) {
-  for (var e = m > 0 && undefined !== m ? m : 21, t = ""; t.length < e;) t += Math.random().toString(36).slice(2);
-  return t.slice(0, e);
-}
-function randomnum(e) {
-  e = e || 32;
-  var t = "1234567890",
-    a = t.length,
-    n = "";
-  for (i = 0; i < e; i++) n += t.charAt(Math.floor(Math.random() * a));
-  return n;
-}
-function Env(t, e) {
-  "undefined" != typeof process && JSON.stringify(process.env).indexOf("GITHUB") > -1 && process.exit(0);
-  class s {
-    constructor(t) {
-      this.env = t;
-    }
-    send(t, e = "GET") {
-      t = "string" == typeof t ? {
-        url: t
-      } : t;
-      let s = this.get;
-      "POST" === e && (s = this.post);
-      return new Promise((e, i) => {
-        s.call(this, t, (t, s, r) => {
-          t ? i(t) : e(s);
-        });
-      });
-    }
-    get(t) {
-      return this.send.call(this.env, t);
-    }
-    post(t) {
-      return this.send.call(this.env, t, "POST");
+let maxConcurrency = 0x3;
+class UserInfo {
+  constructor(_0x204c0e) {
+    var _0x1d16f4 = _0x31626c,
+      _0x15267 = {
+        'caBFc': 'UTF-8',
+        'zvXBO': _0x1d16f4(0x135, 'qzu4'),
+        'Vtpcn': _0x1d16f4(0x175, '4XT$'),
+        'hTAsr': _0x1d16f4(0x1f2, 'bcrg'),
+        'feJni': '*/*'
+      },
+      [_0x204c0e, _0x285dbf] = _0x204c0e['split']('#');
+    this[_0x1d16f4(0x120, 's^Fb')] = _0x204c0e;
+    this[_0x1d16f4(0x1b0, 'i5sJ')] = _0x285dbf;
+    this[_0x1d16f4(0x1f4, '4XT$')] = null;
+    this[_0x1d16f4(0x1f1, 'Duu@')] = [];
+    this[_0x1d16f4(0x13c, 'OZF%')] = {
+      'Accept-Charset': _0x15267['caBFc'],
+      'referer': 'https://6460749742196442.h5app.10086.cn/6460749742196442/1.0.119.883/index.html#pages/qwhdmark/views/home/index',
+      'login-check': '1',
+      'x-requested-with': _0x15267[_0x1d16f4(0x1ab, 'dAmJ')],
+      'User-Agent': '',
+      'Host': _0x1d16f4(0x172, 'o&!p'),
+      'Connection': _0x15267['Vtpcn'],
+      'Cookie': '',
+      'content-type': _0x15267['hTAsr'],
+      'Accept': _0x15267[_0x1d16f4(0x1e4, 'bvcO')]
+    };
+  }
+  async [_0x31626c(0x1a8, 's^Fb')]() {
+    var _0x362e00 = _0x31626c,
+      _0x5b86e8 = {
+        'WcBrq': 'app任务',
+        'UtsyF': '微信公众号任务',
+        'dbrtW': _0x362e00(0x1ae, 'M6gf'),
+        'RUTIG': _0x362e00(0x170, 'OZF%'),
+        'eDyNt': function (_0x6d2f0d, _0x153927) {
+          return _0x6d2f0d == _0x153927;
+        },
+        'JBFsS': '---暂时关闭APP任务---',
+        'Nyoeq': 'User-Agent',
+        'giiwG': _0x362e00(0x1c9, '7s9m')
+      };
+    try {
+      await this[_0x362e00(0x1cf, '!]Yd')]();
+      await $[_0x362e00(0x11e, 'iR[C')](0x1f4);
+      await this[_0x362e00(0x1d6, '$zd$')]();
+      for (const _0x1003ea of [{
+        'name': _0x5b86e8[_0x362e00(0x115, 'hnc8')],
+        'user_agent': userAgents[_0x362e00(0xe0, 's^Fb')]
+      }, {
+        'name': _0x5b86e8[_0x362e00(0x10c, ']mm[')],
+        'user_agent': userAgents['wx']
+      }, {
+        'name': _0x5b86e8[_0x362e00(0x122, '4XT$')],
+        'user_agent': userAgents[_0x362e00(0x173, 'ZsT9')]
+      }, {
+        'name': _0x5b86e8[_0x362e00(0x1fa, ']mm[')],
+        'user_agent': userAgents[_0x362e00(0xf0, '%ufc')]
+      }]) _0x5b86e8[_0x362e00(0x182, '8vug')](_0x5b86e8['WcBrq'], _0x1003ea[_0x362e00(0x186, 'o&!p')]) ? console[_0x362e00(0x11d, '%ufc')](_0x5b86e8[_0x362e00(0x147, 'Yo*w')]) : (this[_0x362e00(0xea, 'iR[C')][_0x5b86e8[_0x362e00(0x1cb, '8vug')]] = _0x1003ea[_0x362e00(0x16c, 'qzu4')], console['log']('\x0a========' + _0x1003ea['name'] + _0x362e00(0x1a7, 'lt#x')), await this['getTaskList'](), await $[_0x362e00(0x159, 'M6gf')](0x1388));
+      await $[_0x362e00(0x197, 'Bt(&')](0x1f4);
+      await this[_0x362e00(0xde, 'zxM5')]();
+    } catch (_0x41c27d) {
+      console['error'](_0x5b86e8[_0x362e00(0x18e, 'kEEx')], _0x41c27d['message']);
     }
   }
-  return new class {
-    constructor(t, e) {
-      this.name = t;
-      this.http = new s(this);
-      this.data = null;
-      this.dataFile = "box.dat";
-      this.logs = [];
-      this.isMute = false;
-      this.isNeedRewrite = false;
-      this.logSeparator = "\n";
-      this.startTime = new Date().getTime();
-      Object.assign(this, e);
-      this.log("", `🔔${this.name}, 开始!`);
+  async [_0x31626c(0xe9, 'NU6]')]() {
+    var _0x1cf1d1 = _0x31626c,
+      _0x56f696 = {
+        'jFWZB': 'GET',
+        'DVpUw': _0x1cf1d1(0x172, 'o&!p'),
+        'bYpiI': 'Keep-Alive',
+        'ALaVD': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+        'AcgHx': _0x1cf1d1(0x1b2, 'qzu4'),
+        'LUMVN': _0x1cf1d1(0xdf, 'o&!p')
+      };
+    try {
+      var _0x3d2c14,
+        _0x5cc425,
+        _0x2396ff = (await $['request']({
+          'url': _0x1cf1d1(0x142, 'hnc8'),
+          'method': _0x56f696['jFWZB'],
+          'headers': {
+            'Host': _0x56f696[_0x1cf1d1(0x18d, 'M6gf')],
+            'Connection': _0x56f696[_0x1cf1d1(0x1c1, '%ufc')],
+            'User-Agent': userAgents['zfb'],
+            'Accept': _0x56f696[_0x1cf1d1(0x1ca, 'y29P')],
+            'Accept-Encoding': _0x1cf1d1(0x180, 'o&!p'),
+            'Upgrade-Insecure-Requests': '1'
+          }
+        }))[_0x1cf1d1(0x1d3, '$zd$')]['res'][_0x1cf1d1(0x1d1, 'dAmJ')][_0x1cf1d1(0x1d7, '(hg5')](/sid%3D([^&]*)/);
+      _0x2396ff ? (this[_0x1cf1d1(0x1d4, 'F0gh')] = _0x2396ff[0x1], _0x3d2c14 = {
+        'url': 'https://wx.online-cmcc.cn/qwhdsso/alipay?auth_code=' + this[_0x1cf1d1(0xd3, '2[oX')] + _0x1cf1d1(0x1e3, '1MK9') + this[_0x1cf1d1(0x1b8, 'Yo*w')] + _0x1cf1d1(0x1ed, 'i5sJ'),
+        'method': _0x56f696['jFWZB'],
+        'headers': {
+          'Host': _0x56f696[_0x1cf1d1(0x13e, '2[oX')],
+          'Connection': 'Keep-Alive',
+          'User-Agent': userAgents[_0x1cf1d1(0x13a, 'M6gf')],
+          'Accept': _0x56f696[_0x1cf1d1(0x12a, 'l^iX')],
+          'Accept-Encoding': _0x1cf1d1(0xfb, ']mm['),
+          'Upgrade-Insecure-Requests': '1'
+        }
+      }, _0x5cc425 = await $[_0x1cf1d1(0x1f6, 'bvcO')](_0x3d2c14), await $[_0x1cf1d1(0x151, 'l^iX')](0x1f4), this[_0x1cf1d1(0xe1, 'Q%Aw')][_0x1cf1d1(0xf3, 'J1DW')] = _0x5cc425[_0x1cf1d1(0x166, 'bQnn')][_0x1cf1d1(0x15a, 'F0gh')]) : console[_0x1cf1d1(0xe3, 'M6gf')](_0x1cf1d1(0xee, 'Duu@'));
+      await $['wait'](0x1f4);
+    } catch (_0xba6c18) {
+      console[_0x1cf1d1(0xf1, '9nz0')](_0x56f696[_0x1cf1d1(0x1f8, 's^Fb')], _0xba6c18['message']);
     }
-    isNode() {
-      return "undefined" != typeof module && !!module.exports;
+  }
+  async ['sign_in']() {
+    var _0x287482 = _0x31626c,
+      _0x41a331 = {
+        'liIBL': _0x287482(0x1a3, 'n9PL'),
+        'egXll': function (_0x2374d5, _0x45c175) {
+          return _0x2374d5 !== _0x45c175;
+        },
+        'ujclw': _0x287482(0x177, '1MK9'),
+        'phRyH': _0x287482(0x14a, '4XT$'),
+        'cIbRe': _0x287482(0x15f, '6Ed4'),
+        'HuaHg': function (_0x3ca5ce, _0x1a3611) {
+          return _0x3ca5ce + _0x1a3611;
+        },
+        'RxhyL': '签到失败，错误信息：',
+        'dWmOK': _0x287482(0x1eb, 's^Fb')
+      };
+    try {
+      var _0xfbbe91,
+        _0x309a6b,
+        _0x5089eb = {
+          'url': 'https://wx.10086.cn/qwhdhub/api/mark/info/prizeInfo',
+          'method': _0x287482(0x1dd, 'lqA3'),
+          'headers': this['headers'],
+          'data': {}
+        },
+        _0x3a64df = (await $['request'](_0x5089eb))[_0x41a331[_0x287482(0x168, '6Ed4')]];
+      _0x41a331[_0x287482(0x1d8, 'tmJ8')](_0x41a331['ujclw'], _0x3a64df[_0x287482(0xf8, '%ufc')]) ? (this['signResult']['push'](_0x3a64df[_0x287482(0xe8, 'iR[C')]), console[_0x287482(0x1c0, 'F0gh')](_0x3a64df[_0x287482(0x190, 'xSEj')])) : _0x3a64df[_0x287482(0x1ce, '6Ed4')]['todayMarked'] ? (this[_0x287482(0x10f, 'bvcO')]['push'](_0x41a331[_0x287482(0x181, 'Yo*w')]), console['log'](_0x41a331[_0x287482(0x150, '5VAP')])) : (await $['wait'](0x1f4), _0xfbbe91 = {
+        'url': _0x287482(0x1b1, '!]Yd'),
+        'method': _0x287482(0x161, '(k%J'),
+        'headers': this[_0x287482(0xed, 'lqA3')],
+        'data': {}
+      }, _0x309a6b = (await $['request'](_0xfbbe91))[_0x41a331[_0x287482(0x1cd, 'bQnn')]], _0x41a331[_0x287482(0x110, 'bcrg')](_0x41a331[_0x287482(0x1b6, '1MK9')], _0x309a6b['code']) ? (this[_0x287482(0x1f9, 'dAmJ')]['push'](_0x309a6b['msg']), console['log'](_0x309a6b[_0x287482(0x10e, '!]Yd')])) : (this[_0x287482(0x185, ']mm[')]['push'](_0x287482(0x1a0, 'kEEx')), console[_0x287482(0x101, ']mm[')](_0x41a331['cIbRe'])));
+    } catch (_0x23c757) {
+      this[_0x287482(0x1ef, '!]Yd')][_0x287482(0x1ac, 'lt#x')](_0x41a331[_0x287482(0x19d, 'n9PL')](_0x41a331[_0x287482(0x149, 'iR[C')], _0x23c757[_0x287482(0x121, ']mm[')]));
+      console[_0x287482(0x107, 'NU6]')](_0x41a331['dWmOK'], _0x23c757);
     }
-    isQuanX() {
-      return "undefined" != typeof $task;
+  }
+  async ['getTaskList']() {
+    var _0xb19fef = _0x31626c,
+      _0x218260 = {
+        'GbMVg': _0xb19fef(0x116, '%ufc'),
+        'zmOtV': _0xb19fef(0x18c, '2[oX'),
+        'QPGAY': function (_0x161f3c, _0x171dae) {
+          return _0x161f3c !== _0x171dae;
+        },
+        'PeSxx': 'SUCCESS',
+        'QjJpD': _0xb19fef(0x1bf, '6Ed4'),
+        'OBRzl': '-----每周任务-----',
+        'nOLHv': '-----每月任务-----'
+      };
+    try {
+      var _0x535324,
+        _0x264086 = {
+          'url': _0x218260[_0xb19fef(0xd0, '$zd$')],
+          'method': _0xb19fef(0x11a, 'lt#x'),
+          'headers': this[_0xb19fef(0x1bc, 'Duu@')],
+          'data': {}
+        },
+        _0x20e34b = (await $[_0xb19fef(0x1f7, 'xSEj')](_0x264086))[_0x218260[_0xb19fef(0x17f, 'o&!p')]];
+      _0x218260[_0xb19fef(0x105, 'lt#x')](_0x218260[_0xb19fef(0xef, 'Bt(&')], _0x20e34b['code']) ? console[_0xb19fef(0x1d5, 'iR[C')](_0x20e34b['msg']) : (_0x535324 = _0x20e34b[_0xb19fef(0x167, '%ufc')][_0xb19fef(0x12e, '6Ed4')], console[_0xb19fef(0x194, '4XT$')](_0x218260['QjJpD']), await this[_0xb19fef(0x113, 'hnc8')](_0x535324, '1', maxConcurrency), console[_0xb19fef(0x14e, 'qzu4')](_0x218260[_0xb19fef(0x11b, 'iRuY')]), await this['processTaskByType'](_0x535324, '2', maxConcurrency), console[_0xb19fef(0x194, '4XT$')](_0x218260[_0xb19fef(0x1a2, '9nz0')]), await this['processTaskByType'](_0x535324, '3', maxConcurrency));
+    } catch (_0x54d380) {
+      console[_0xb19fef(0x15c, 's^Fb')](_0x54d380['message']);
     }
-    isSurge() {
-      return "undefined" != typeof $httpClient && "undefined" == typeof $loon;
-    }
-    isLoon() {
-      return "undefined" != typeof $loon;
-    }
-    toObj(t, e = null) {
+  }
+  async ['processTaskByType'](_0x172b90, _0x36a92f, _0x230430) {
+    var _0x9c32e4 = _0x31626c,
+      _0xda1276 = {
+        'wUKKT': function (_0xee954d, _0x1dff5d) {
+          return _0xee954d == _0x1dff5d;
+        },
+        'Mlcxb': function (_0x50fd31, _0x22a2dd, _0x5172e6, _0x14874f) {
+          return _0x50fd31(_0x22a2dd, _0x5172e6, _0x14874f);
+        },
+        'RxZQX': function (_0x2d9327, _0x3e2f75) {
+          return _0x2d9327 >= _0x3e2f75;
+        }
+      };
+    const _0x3fa699 = [];
+    var _0x458249 = async (_0x1d927f, _0x2ef070, _0x1d3524) => {
+      var _0x438879 = _0x1588;
       try {
-        return JSON.parse(t);
-      } catch {
-        return e;
+        _0x2ef070 ? _0xda1276[_0x438879(0xf5, '$zd$')](0x2, _0x2ef070) ? console[_0x438879(0x124, 'y29P')](_0x438879(0x1be, '(hg5') + _0x1d3524 + ']') : 0x1 == _0x2ef070 && (console['log'](_0x438879(0x114, 'xSEj') + _0x1d3524 + ']'), await this['doTask'](_0x1d927f, _0x2ef070)) : (console[_0x438879(0x101, ']mm[')](_0x438879(0x17d, 'M6gf') + _0x1d3524 + ']'), await this[_0x438879(0xdc, 'kPt2')](_0x1d927f, _0x2ef070));
+      } finally {
+        _0x3fa699['splice'](_0x3fa699[_0x438879(0x1e8, 'Bt(&')](_0x1d927f), 0x1);
       }
+    };
+    for (const _0x577460 of _0x172b90[_0x9c32e4(0x1ba, 'iR[C')](_0x38d1e8 => _0x38d1e8[_0x9c32e4(0x108, '1MK9')] === _0x36a92f)) {
+      var {
+          taskName: _0x295262,
+          taskId: _0x4d8444,
+          status: _0x25d842
+        } = _0x577460,
+        _0x4d8444 = _0xda1276['Mlcxb'](_0x458249, _0x4d8444, _0x25d842, _0x295262);
+      _0x3fa699[_0x9c32e4(0x1de, 'kEEx')](_0x4d8444);
+      _0xda1276[_0x9c32e4(0x1e6, 'kEEx')](_0x3fa699[_0x9c32e4(0x19f, 'iRuY')], _0x230430) && (await Promise[_0x9c32e4(0x14c, '9nz0')](_0x3fa699));
     }
-    toStr(t, e = null) {
-      try {
-        return JSON.stringify(t);
-      } catch {
-        return e;
-      }
-    }
-    getjson(t, e) {
-      let s = e;
-      const i = this.getdata(t);
-      if (i) try {
-        s = JSON.parse(this.getdata(t));
-      } catch {}
-      return s;
-    }
-    setjson(t, e) {
-      try {
-        return this.setdata(JSON.stringify(t), e);
-      } catch {
-        return false;
-      }
-    }
-    getScript(t) {
-      return new Promise(e => {
-        this.get({
-          url: t
-        }, (t, s, i) => e(i));
-      });
-    }
-    runScript(t, e) {
-      return new Promise(s => {
-        let i = this.getdata("@chavy_boxjs_userCfgs.httpapi");
-        i = i ? i.replace(/\n/g, "").trim() : i;
-        let r = this.getdata("@chavy_boxjs_userCfgs.httpapi_timeout");
-        r = r ? 1 * r : 20;
-        r = e && e.timeout ? e.timeout : r;
-        const [o, h] = i.split("@"),
-          n = {
-            url: `http://${h}/v1/scripting/evaluate`,
-            body: {
-              script_text: t,
-              mock_type: "cron",
-              timeout: r
-            },
-            headers: {
-              "X-Key": o,
-              Accept: "*/*"
+    await Promise['all'](_0x3fa699);
+  }
+  async [_0x31626c(0xd2, '6Ed4')](_0x247e93, _0x5aee35) {
+    var _0xc5c6db = _0x31626c,
+      _0x567fa9 = {
+        'MYSiV': 'POST',
+        'nrJFb': _0xc5c6db(0x1d0, '9nz0'),
+        'sGMjI': _0xc5c6db(0x162, 'hnc8'),
+        'cQWnG': function (_0x54a0fe, _0x3baa26) {
+          return _0x54a0fe !== _0x3baa26;
+        },
+        'gsyAi': 'SUCCESS',
+        'hglfQ': _0xc5c6db(0x1ad, '6Ed4'),
+        'hNjqw': function (_0xc8e7e4, _0xdb3585) {
+          return _0xc8e7e4 !== _0xdb3585;
+        }
+      };
+    try {
+      if (!_0x5aee35) {
+        var _0x392b7a = {
+            'url': _0xc5c6db(0x127, '1MK9'),
+            'method': _0x567fa9[_0xc5c6db(0x19e, '$zd$')],
+            'headers': this['headers'],
+            'data': {
+              'taskId': _0x247e93
             }
-          };
-        this.post(n, (t, e, i) => s(i));
-      }).catch(t => this.logErr(t));
-    }
-    loaddata() {
-      if (!this.isNode()) return {};
-      {
-        this.fs = this.fs ? this.fs : require("fs");
-        this.path = this.path ? this.path : require("path");
-        const t = this.path.resolve(this.dataFile),
-          e = this.path.resolve(process.cwd(), this.dataFile),
-          s = this.fs.existsSync(t),
-          i = !s && this.fs.existsSync(e);
-        if (!s && !i) return {};
-        {
-          const i = s ? t : e;
-          try {
-            return JSON.parse(this.fs.readFileSync(i));
-          } catch (t) {
-            return {};
+          },
+          _0x19603f = (await $[_0xc5c6db(0x179, 'kEEx')](_0x392b7a))[_0x567fa9['nrJFb']];
+        if (_0xc5c6db(0x164, 'sueB') !== _0x19603f[_0xc5c6db(0x198, 'iR[C')]) {
+          return console[_0xc5c6db(0x165, 'jM4y')](_0x19603f[_0xc5c6db(0x169, 'ZsT9')]);
+        }
+        var _0x25dcfc = _0x19603f[_0xc5c6db(0x167, '%ufc')]['taskType'],
+          _0x547af7 = (await $[_0xc5c6db(0x191, '8T8h')](0x1388), {
+            'url': _0x567fa9[_0xc5c6db(0x145, 'bQnn')],
+            'method': _0xc5c6db(0x137, 'hnc8'),
+            'headers': this['headers'],
+            'data': {
+              'taskId': _0x247e93,
+              'taskType': _0x25dcfc
+            }
+          }),
+          _0x4ce790 = (await $['request'](_0x547af7))[_0x567fa9[_0xc5c6db(0x132, '2[oX')]];
+        if (_0x567fa9[_0xc5c6db(0x19b, 'y29P')](_0x567fa9[_0xc5c6db(0x184, 'ZsT9')], _0x4ce790['code'])) {
+          return console[_0xc5c6db(0x129, '8T8h')](_0x4ce790[_0xc5c6db(0x1ea, 'i5sJ')]);
+        }
+      }
+      var _0x26f0f0,
+        _0x499293 = {
+          'url': _0x567fa9['hglfQ'],
+          'method': 'POST',
+          'headers': this['headers'],
+          'data': {
+            'taskId': _0x247e93
           }
-        }
-      }
+        },
+        _0x6566a9 = (await $['request'](_0x499293))[_0xc5c6db(0x1a3, 'n9PL')];
+      _0x567fa9[_0xc5c6db(0x160, 'iRuY')](_0xc5c6db(0x177, '1MK9'), _0x6566a9['code']) ? console[_0xc5c6db(0x17a, '8vug')](_0x6566a9[_0xc5c6db(0x1a1, 'tmJ8')]) : (_0x26f0f0 = _0x6566a9['data'][_0xc5c6db(0xf9, '8vug')], console['log']('领取' + _0x26f0f0 + _0xc5c6db(0x163, 'bcrg')));
+    } catch (_0x14254c) {
+      console['log'](_0xc5c6db(0xd8, 'ZsT9'), _0x14254c[_0xc5c6db(0xf6, '4XT$')]);
     }
-    writedata() {
-      if (this.isNode()) {
-        this.fs = this.fs ? this.fs : require("fs");
-        this.path = this.path ? this.path : require("path");
-        const t = this.path.resolve(this.dataFile),
-          e = this.path.resolve(process.cwd(), this.dataFile),
-          s = this.fs.existsSync(t),
-          i = !s && this.fs.existsSync(e),
-          r = JSON.stringify(this.data);
-        s ? this.fs.writeFileSync(t, r) : i ? this.fs.writeFileSync(e, r) : this.fs.writeFileSync(t, r);
-      }
-    }
-    lodash_get(t, e, s) {
-      const i = e.replace(/\[(\d+)\]/g, ".$1").split(".");
-      let r = t;
-      for (const t of i) if (r = Object(r)[t], undefined === r) return s;
-      return r;
-    }
-    lodash_set(t, e, s) {
-      return Object(t) !== t ? t : (Array.isArray(e) || (e = e.toString().match(/[^.[\]]+/g) || []), e.slice(0, -1).reduce((t, s, i) => Object(t[s]) === t[s] ? t[s] : t[s] = Math.abs(e[i + 1]) >> 0 == +e[i + 1] ? [] : {}, t)[e[e.length - 1]] = s, t);
-    }
-    getdata(t) {
-      let e = this.getval(t);
-      if (/^@/.test(t)) {
-        const [, s, i] = /^@(.*?)\.(.*?)$/.exec(t),
-          r = s ? this.getval(s) : "";
-        if (r) try {
-          const t = JSON.parse(r);
-          e = t ? this.lodash_get(t, i, "") : e;
-        } catch (t) {
-          e = "";
-        }
-      }
-      return e;
-    }
-    setdata(t, e) {
-      let s = false;
-      if (/^@/.test(e)) {
-        const [, i, r] = /^@(.*?)\.(.*?)$/.exec(e),
-          o = this.getval(i),
-          h = i ? "null" === o ? null : o || "{}" : "{}";
-        try {
-          const e = JSON.parse(h);
-          this.lodash_set(e, r, t);
-          s = this.setval(JSON.stringify(e), i);
-        } catch (e) {
-          const o = {};
-          this.lodash_set(o, r, t);
-          s = this.setval(JSON.stringify(o), i);
-        }
-      } else s = this.setval(t, e);
-      return s;
-    }
-    getval(t) {
-      return this.isSurge() || this.isLoon() ? $persistentStore.read(t) : this.isQuanX() ? $prefs.valueForKey(t) : this.isNode() ? (this.data = this.loaddata(), this.data[t]) : this.data && this.data[t] || null;
-    }
-    setval(t, e) {
-      return this.isSurge() || this.isLoon() ? $persistentStore.write(t, e) : this.isQuanX() ? $prefs.setValueForKey(t, e) : this.isNode() ? (this.data = this.loaddata(), this.data[e] = t, this.writedata(), true) : this.data && this.data[e] || null;
-    }
-    initGotEnv(t) {
-      this.got = this.got ? this.got : require("got");
-      this.cktough = this.cktough ? this.cktough : require("tough-cookie");
-      this.ckjar = this.ckjar ? this.ckjar : new this.cktough.CookieJar();
-      t && (t.headers = t.headers ? t.headers : {}, undefined === t.headers.Cookie && undefined === t.cookieJar && (t.cookieJar = this.ckjar));
-    }
-    get(t, e = () => {}) {
-      t.headers && (delete t.headers["Content-Type"], delete t.headers["Content-Length"]);
-      this.isSurge() || this.isLoon() ? (this.isSurge() && this.isNeedRewrite && (t.headers = t.headers || {}, Object.assign(t.headers, {
-        "X-Surge-Skip-Scripting": false
-      })), $httpClient.get(t, (t, s, i) => {
-        !t && s && (s.body = i, s.statusCode = s.status);
-        e(t, s, i);
-      })) : this.isQuanX() ? (this.isNeedRewrite && (t.opts = t.opts || {}, Object.assign(t.opts, {
-        hints: false
-      })), $task.fetch(t).then(t => {
-        const {
-          statusCode: s,
-          statusCode: i,
-          headers: r,
-          body: o
-        } = t;
-        e(null, {
-          status: s,
-          statusCode: i,
-          headers: r,
-          body: o
-        }, o);
-      }, t => e(t))) : this.isNode() && (this.initGotEnv(t), this.got(t).on("redirect", (t, e) => {
-        try {
-          if (t.headers["set-cookie"]) {
-            const s = t.headers["set-cookie"].map(this.cktough.Cookie.parse).toString();
-            s && this.ckjar.setCookieSync(s, null);
-            e.cookieJar = this.ckjar;
-          }
-        } catch (t) {
-          this.logErr(t);
-        }
-      }).then(t => {
-        const {
-          statusCode: s,
-          statusCode: i,
-          headers: r,
-          body: o
-        } = t;
-        e(null, {
-          status: s,
-          statusCode: i,
-          headers: r,
-          body: o
-        }, o);
-      }, t => {
-        const {
-          message: s,
-          response: i
-        } = t;
-        e(s, i, i && i.body);
-      }));
-    }
-    post(t, e = () => {}) {
-      if (t.body && t.headers && !t.headers["Content-Type"] && (t.headers["Content-Type"] = "application/x-www-form-urlencoded"), t.headers && delete t.headers["Content-Length"], this.isSurge() || this.isLoon()) this.isSurge() && this.isNeedRewrite && (t.headers = t.headers || {}, Object.assign(t.headers, {
-        "X-Surge-Skip-Scripting": false
-      })), $httpClient.post(t, (t, s, i) => {
-        !t && s && (s.body = i, s.statusCode = s.status);
-        e(t, s, i);
-      });else if (this.isQuanX()) t.method = "POST", this.isNeedRewrite && (t.opts = t.opts || {}, Object.assign(t.opts, {
-        hints: false
-      })), $task.fetch(t).then(t => {
-        const {
-          statusCode: s,
-          statusCode: i,
-          headers: r,
-          body: o
-        } = t;
-        e(null, {
-          status: s,
-          statusCode: i,
-          headers: r,
-          body: o
-        }, o);
-      }, t => e(t));else if (this.isNode()) {
-        this.initGotEnv(t);
-        const {
-          url: s,
-          ...i
-        } = t;
-        this.got.post(s, i).then(t => {
-          const {
-            statusCode: s,
-            statusCode: i,
-            headers: r,
-            body: o
-          } = t;
-          e(null, {
-            status: s,
-            statusCode: i,
-            headers: r,
-            body: o
-          }, o);
-        }, t => {
-          const {
-            message: s,
-            response: i
-          } = t;
-          e(s, i, i && i.body);
-        });
-      }
-    }
-    time(t, e = null) {
-      const s = e ? new Date(e) : new Date();
-      let i = {
-        "M+": s.getMonth() + 1,
-        "d+": s.getDate(),
-        "H+": s.getHours(),
-        "m+": s.getMinutes(),
-        "s+": s.getSeconds(),
-        "q+": Math.floor((s.getMonth() + 3) / 3),
-        S: s.getMilliseconds()
+  }
+  async [_0x31626c(0x1ee, 'i5sJ')]() {
+    var _0x322197 = _0x31626c,
+      _0x88ad27 = {
+        'ECKXQ': _0x322197(0x1c7, 'qzu4'),
+        'iEbCf': 'POST',
+        'ZYDhz': _0x322197(0x1a5, '7s9m'),
+        'ZzOGQ': 'data',
+        'TkUjI': 'SUCCESS',
+        'LmaYz': function (_0x4033ff, _0x3a869d) {
+          return _0x4033ff(_0x3a869d);
+        },
+        'jRhhi': function (_0xe1ab9c, _0x346312) {
+          return _0xe1ab9c <= _0x346312;
+        },
+        'eVFFf': _0x322197(0x1e5, 'M6gf'),
+        'eRmgz': function (_0x339a28, _0x41312d) {
+          return _0x339a28 + _0x41312d;
+        },
+        'qdHaI': '去兑换奖品:\x20',
+        'hpzig': _0x322197(0x118, 'n9PL'),
+        'esxCr': '当前用户未开启兑换'
       };
-      /(y+)/.test(t) && (t = t.replace(RegExp.$1, (s.getFullYear() + "").substr(4 - RegExp.$1.length)));
-      for (let e in i) new RegExp("(" + e + ")").test(t) && (t = t.replace(RegExp.$1, 1 == RegExp.$1.length ? i[e] : ("00" + i[e]).substr(("" + i[e]).length)));
-      return t;
+    try {
+      var _0x248c07,
+        _0x290cc1,
+        _0x5b7b8a,
+        _0x268117,
+        _0xb91d97 = {
+          'url': _0x88ad27[_0x322197(0x125, 'bvcO')],
+          'method': _0x88ad27[_0x322197(0x19c, 'ZsT9')],
+          'headers': this['headers'],
+          'data': {
+            'channel': _0x88ad27[_0x322197(0x199, 'l^iX')]
+          }
+        },
+        _0x3cf59a = (await $[_0x322197(0x111, 'lqA3')](_0xb91d97))[_0x88ad27[_0x322197(0x1b5, ']mm[')]];
+      _0x88ad27[_0x322197(0x131, 'iRuY')] !== _0x3cf59a['code'] ? console[_0x322197(0xd7, 's^Fb')](_0x3cf59a[_0x322197(0x136, 'OZF%')]) : (_0x248c07 = _0x88ad27['LmaYz'](parseFloat, _0x3cf59a[_0x322197(0x16f, '!]Yd')][_0x322197(0x1fb, 'dAmJ')]), console[_0x322197(0x1a9, 'n9PL')](_0x322197(0x12c, 'Bt(&') + _0x248c07 + '心愿金'), this[_0x322197(0x1bd, '$zd$')] ? (_0x290cc1 = _0x3cf59a[_0x322197(0x154, 'M6gf')][_0x322197(0x19a, 'Q%Aw')][_0x322197(0xf7, 'lqA3')](_0x348e8c => _0x348e8c[_0x322197(0x130, 'hnc8')] === this[_0x322197(0x1b3, 'jM4y')])) ? ({
+        cost: _0x5b7b8a,
+        id: _0x268117
+      } = _0x290cc1, _0x88ad27['jRhhi'](_0x248c07, _0x5b7b8a) ? console['log'](_0x88ad27[_0x322197(0x11c, 'Yo*w')]) : (console[_0x322197(0x1cc, 'i5sJ')](_0x88ad27[_0x322197(0x109, '8T8h')](_0x88ad27[_0x322197(0x102, 'sueB')], this[_0x322197(0xce, '7s9m')])), await this[_0x322197(0x103, '2[oX')](_0x268117))) : console[_0x322197(0x126, 'lt#x')](_0x88ad27['hpzig']) : console[_0x322197(0xe3, 'M6gf')](_0x88ad27['esxCr']));
+    } catch (_0xbaac32) {
+      console[_0x322197(0xd1, 'dAmJ')]('查询出错了:', _0xbaac32[_0x322197(0x1b7, 'Yo*w')]);
     }
-    msg(e = t, s = "", i = "", r) {
-      const o = t => {
-        if (!t) return t;
-        if ("string" == typeof t) return this.isLoon() ? t : this.isQuanX() ? {
-          "open-url": t
-        } : this.isSurge() ? {
-          url: t
-        } : undefined;
-        if ("object" == typeof t) {
-          if (this.isLoon()) {
-            let e = t.openUrl || t.url || t["open-url"],
-              s = t.mediaUrl || t["media-url"];
-            return {
-              openUrl: e,
-              mediaUrl: s
-            };
-          }
-          if (this.isQuanX()) {
-            let e = t["open-url"] || t.url || t.openUrl,
-              s = t["media-url"] || t.mediaUrl;
-            return {
-              "open-url": e,
-              "media-url": s
-            };
-          }
-          if (this.isSurge()) {
-            let e = t.url || t.openUrl || t["open-url"];
-            return {
-              url: e
-            };
-          }
-        }
+  }
+  async [_0x31626c(0x14d, '7s9m')](_0x5025f2) {
+    var _0x29d9f9 = _0x31626c,
+      _0x57fc67 = {
+        'lddXS': _0x29d9f9(0x17e, 'tmJ8'),
+        'mIDlx': function (_0x275d60, _0x8c8435) {
+          return _0x275d60 !== _0x8c8435;
+        },
+        'aVnbJ': _0x29d9f9(0x178, '4XT$'),
+        'ccdjb': function (_0x5772be, _0x457d44) {
+          return _0x5772be + _0x457d44;
+        },
+        'WMLlz': _0x29d9f9(0x195, 'jM4y'),
+        'itZGo': 'https://wx.10086.cn/qwhdhub/api/mark/task/exchange',
+        'QtXlc': 'POST',
+        'WqJRP': _0x29d9f9(0xfc, 'bvcO'),
+        'GmPHU': '兑换出错了:'
       };
-      if (this.isMute || (this.isSurge() || this.isLoon() ? $notification.post(e, s, i, o(r)) : this.isQuanX() && $notify(e, s, i, o(r))), !this.isMuteLog) {
-        let t = ["", "==============📣系统通知📣=============="];
-        t.push(e);
-        s && t.push(s);
-        i && t.push(i);
-        console.log(t.join("\n"));
-        this.logs = this.logs.concat(t);
-      }
+    try {
+      var _0x25f20b,
+        _0x52f674,
+        _0x12499e,
+        _0x518562 = {
+          'url': _0x29d9f9(0x1e1, 'y29P'),
+          'method': _0x29d9f9(0x158, '%ufc'),
+          'headers': this['headers'],
+          'data': {
+            'prizeId': _0x5025f2
+          }
+        },
+        _0x1fa24e = (await $[_0x29d9f9(0x1a4, '8vug')](_0x518562))[_0x57fc67[_0x29d9f9(0xf4, 'jM4y')]];
+      _0x57fc67[_0x29d9f9(0xd5, '%ufc')](_0x57fc67[_0x29d9f9(0x18f, 'sueB')], _0x1fa24e[_0x29d9f9(0x10a, 'y29P')]) ? console[_0x29d9f9(0x107, 'NU6]')](_0x1fa24e['msg']) : 0x0 === (_0x25f20b = _0x1fa24e[_0x29d9f9(0xfe, 'bcrg')][_0x29d9f9(0x1e7, '!]Yd')]) ? console['log'](_0x29d9f9(0x100, 'M6gf')) : (console[_0x29d9f9(0x101, ']mm[')](_0x57fc67[_0x29d9f9(0x1aa, 'hnc8')](_0x57fc67['WMLlz'], _0x25f20b)), _0x52f674 = {
+        'url': _0x57fc67[_0x29d9f9(0x18a, '2[oX')],
+        'method': _0x57fc67[_0x29d9f9(0x104, 'qzu4')],
+        'headers': this[_0x29d9f9(0x1f3, 'bcrg')],
+        'data': {
+          'prizeId': _0x5025f2
+        }
+      }, _0x12499e = (await $[_0x29d9f9(0x1bb, 'ZsT9')](_0x52f674))[_0x57fc67['lddXS']], 'SUCCESS' !== _0x12499e['code'] ? console['log'](_0x12499e['msg']) : console[_0x29d9f9(0x15b, 'bvcO')](_0x57fc67[_0x29d9f9(0xe4, 'OZF%')]));
+    } catch (_0x8768cd) {
+      console['log'](_0x57fc67[_0x29d9f9(0x1b9, '6Ed4')], _0x8768cd[_0x29d9f9(0xe6, 'NU6]')]);
     }
-    log(...t) {
-      t.length > 0 && (this.logs = [...this.logs, ...t]);
-      console.log(t.join(this.logSeparator));
-    }
-    logErr(t, e) {
-      const s = !this.isSurge() && !this.isQuanX() && !this.isLoon();
-      s ? this.log("", `❗️${this.name}, 错误!`, t.stack) : this.log("", `❗️${this.name}, 错误!`, t);
-    }
-    wait(t) {
-      return new Promise(e => setTimeout(e, t));
-    }
-    done(t = {}) {
-      const e = new Date().getTime(),
-        s = (e - this.startTime) / 1000;
-      this.log("", `🔔${this.name}, 结束! 🕛 ${s} 秒`);
-      this.log();
-      (this.isSurge() || this.isQuanX() || this.isLoon()) && $done(t);
-    }
-  }(t, e);
+  }
 }
+function randomInt(_0x4e12d5, _0x47bddf) {
+  var _0x196342 = _0x31626c,
+    _0x40319d = {
+      'aLgzo': function (_0x4ea45c, _0x87445c) {
+        return _0x4ea45c + _0x87445c;
+      },
+      'TwvTL': function (_0x3f347d, _0x31a005) {
+        return _0x3f347d * _0x31a005;
+      },
+      'ZFSgF': function (_0x522f48, _0x5bf5a6) {
+        return _0x522f48 + _0x5bf5a6;
+      },
+      'rwAiY': function (_0x266f85, _0x4efd55) {
+        return _0x266f85 - _0x4efd55;
+      }
+    };
+  return Math['floor'](_0x40319d[_0x196342(0xd9, '2[oX')](_0x40319d[_0x196342(0x153, 'n9PL')](Math[_0x196342(0x141, 'lt#x')](), _0x40319d[_0x196342(0x14b, 'Yo*w')](_0x40319d[_0x196342(0x143, 'jM4y')](_0x47bddf, _0x4e12d5), 0x1)), _0x4e12d5));
+}
+async function SendMsg(_0x9759a5) {
+  var _0x4f37ac = _0x31626c,
+    _0x2e1f5d = {
+      'zaVGl': function (_0x48cef5, _0x52cca5) {
+        return _0x48cef5 < _0x52cca5;
+      }
+    };
+  if (_0x9759a5) {
+    _0x2e1f5d[_0x4f37ac(0x117, 'OZF%')](0x0, notifyFlag) ? $[_0x4f37ac(0x152, 'l^iX')]() ? await notify[_0x4f37ac(0x1a6, 's^Fb')]($[_0x4f37ac(0x155, '1MK9')], _0x9759a5) : $[_0x4f37ac(0xd4, 'dAmJ')](_0x9759a5) : console[_0x4f37ac(0x157, 'zqw3')](_0x9759a5);
+  }
+}
+function Env(_0x2fc673) {
+  var _0x526a1d = _0x31626c,
+    _0x2bc752 = {
+      'Kzlgu': _0x526a1d(0x138, 'Yo*w'),
+      'ZmUbb': function (_0x23f92c, _0x549cec) {
+        return _0x23f92c == _0x549cec;
+      },
+      'SvOVj': function (_0x3238f6, _0x49eb25) {
+        return _0x3238f6 < _0x49eb25;
+      },
+      'pqiow': function (_0x29fb36, _0x5c6525) {
+        return _0x29fb36(_0x5c6525);
+      },
+      'bvDqz': function (_0x23c8e1, _0x463fbe) {
+        return _0x23c8e1 === _0x463fbe;
+      },
+      'kOFBC': '请求失败，已达到最大重试次数',
+      'RZCOM': function (_0x22de87, _0x38a191) {
+        return _0x22de87 === _0x38a191;
+      },
+      'HqhLO': _0x526a1d(0x1e9, 'zxM5'),
+      'MtUkr': _0x526a1d(0x146, 'qzu4'),
+      'JywTp': _0x526a1d(0x10d, 'lt#x'),
+      'cwSbt': _0x526a1d(0xcf, 'OZF%'),
+      'llxwB': function (_0x5e5c2d, _0x4d0d75) {
+        return _0x5e5c2d / _0x4d0d75;
+      },
+      'YrqYA': function (_0x342e4b, _0x4f8bde) {
+        return _0x342e4b - _0x4f8bde;
+      },
+      'EfABO': function (_0x253179, _0x3ca9e4) {
+        return _0x253179(_0x3ca9e4);
+      },
+      'iiwMb': _0x526a1d(0x1c4, 'lt#x')
+    };
+  const _0x375867 = _0x2bc752[_0x526a1d(0x13f, 'Yo*w')](require, _0x2bc752[_0x526a1d(0x119, 'bvcO')]),
+    _0x3e4203 = {
+      'name': _0x2fc673,
+      'startTime': new Date()[_0x526a1d(0x1c6, 'i5sJ')](),
+      'isNode': function () {
+        var _0x5049c3 = _0x526a1d;
+        return _0x2bc752[_0x5049c3(0xd6, 'Q%Aw')] != typeof module && _0x2bc752[_0x5049c3(0x1f0, 'qzu4')]('object', typeof module['exports']);
+      },
+      'request': async function (_0xece825, _0x20e0b2 = 0x1388, _0x358eb7 = 0x3) {
+        var _0x2b5f51 = _0x526a1d;
+        let _0x514eb2 = 0x0;
+        for (; _0x2bc752[_0x2b5f51(0x187, 'bcrg')](_0x514eb2, _0x358eb7);) try {
+          var _0xeb4eca = {
+              ..._0xece825,
+              'timeout': _0x20e0b2
+            },
+            _0x188538 = await _0x2bc752[_0x2b5f51(0x1df, 'kEEx')](_0x375867, _0xeb4eca);
+          debug && console['log'](_0x188538[_0x2b5f51(0x1ec, 'xSEj')]);
+          return _0x188538;
+        } catch (_0x263b35) {
+          if (_0x2bc752[_0x2b5f51(0x1c3, 'F0gh')](++_0x514eb2, _0x358eb7)) {
+            throw new Error(_0x2bc752[_0x2b5f51(0x134, 'ZsT9')]);
+          }
+          _0x2bc752['RZCOM'](_0x2bc752[_0x2b5f51(0x15d, '7s9m')], _0x263b35[_0x2b5f51(0x1db, ']mm[')]) ? console['log'](_0x2bc752['MtUkr']) : _0x263b35[_0x2b5f51(0x12f, '%ufc')] ? console['log'](_0x2bc752['JywTp']) : console[_0x2b5f51(0x165, 'jM4y')](_0x2bc752['cwSbt']);
+        }
+      },
+      'toObj': function (_0x2bbf85, _0x1b89e8 = null) {
+        var _0x56c622 = _0x526a1d;
+        try {
+          return JSON[_0x56c622(0x13d, '1MK9')](_0x2bbf85);
+        } catch {
+          return _0x1b89e8;
+        }
+      },
+      'toStr': function (_0x10ca8f, _0xf335b0 = null) {
+        var _0x5e1691 = _0x526a1d;
+        try {
+          return JSON[_0x5e1691(0x148, 'ch(j')](_0x10ca8f);
+        } catch {
+          return _0xf335b0;
+        }
+      },
+      'logs': [],
+      'log': function (..._0x1857a2) {
+        var _0x15b072 = _0x526a1d;
+        _0x3e4203[_0x15b072(0x189, 'tmJ8')] = [..._0x3e4203[_0x15b072(0xe5, '!]Yd')], ..._0x1857a2];
+        console[_0x15b072(0x16d, 'OZF%')](_0x1857a2[_0x15b072(0x183, 'dAmJ')]('\x0a'));
+      },
+      'logErr': function (_0xd74d39, _0x41124a) {
+        var _0x2a77ab = _0x526a1d;
+        _0x3e4203[_0x2a77ab(0x174, 'bcrg')]('', '❗️' + _0x3e4203[_0x2a77ab(0x17c, '(k%J')] + ',\x20错误!', _0xd74d39);
+      },
+      'wait': function (_0x2b986c) {
+        return new Promise(_0x3b7e6f => setTimeout(_0x3b7e6f, _0x2b986c));
+      },
+      'done': function () {
+        var _0x16dd03 = _0x526a1d,
+          _0x34846f = _0x2bc752[_0x16dd03(0x13b, 'lqA3')](_0x2bc752['YrqYA'](new Date()[_0x16dd03(0x10b, 'dAmJ')](), _0x3e4203[_0x16dd03(0x12b, 'bvcO')]), 0x3e8);
+        return console[_0x16dd03(0x171, 'Q%Aw')]('', '🔔' + _0x3e4203['name'] + ',\x20结束,\x20共运行了' + _0x34846f[_0x16dd03(0xeb, 'Bt(&')](0x2) + '\x20秒');
+      }
+    };
+  return _0x3e4203;
+}
+(async () => {
+  var _0x1cf065 = _0x31626c,
+    _0x5eecf3 = {
+      'AfbMZ': function (_0xc8c96e, _0x5f52e7) {
+        return _0xc8c96e + _0x5f52e7;
+      },
+      'hhrTF': _0x1cf065(0x11f, '1MK9'),
+      'qgPQZ': function (_0x20021d, _0x1089d6) {
+        return _0x20021d(_0x1089d6);
+      }
+    };
+  if (userCookie) {
+    var _0xa20068,
+      _0x3bf95c,
+      _0xf8870a = userCookie['split']('@');
+    console['log'](_0x1cf065(0x156, '4XT$') + _0xf8870a[_0x1cf065(0xf2, 'sueB')] + _0x1cf065(0x1dc, '8T8h'));
+    for ([_0xa20068, _0x3bf95c] of _0xf8870a['entries']()) {
+      console[_0x1cf065(0x16e, 'hnc8')](_0x1cf065(0xe7, 'F0gh') + _0x5eecf3[_0x1cf065(0x16b, 'ch(j')](_0xa20068, 0x1) + _0x1cf065(0x188, 'kPt2'));
+      var _0x29d6a2 = new UserInfo(_0x3bf95c);
+      await _0x29d6a2['run']();
+      console['log'](_0x5eecf3[_0x1cf065(0x1e2, 'bcrg')]);
+      await $[_0x1cf065(0x1c8, 's^Fb')](randomInt(0x1388, 0x2710));
+      msg += _0x1cf065(0x16a, 'ZsT9') + (_0xa20068 + 0x1) + _0x1cf065(0xe2, '!]Yd') + _0x29d6a2[_0x1cf065(0x18b, 'zqw3')]['join']('\x0a') + '\x0a';
+    }
+    await _0x5eecf3['qgPQZ'](SendMsg, msg);
+  } else {
+    console['log'](_0x1cf065(0x1d9, 'tmJ8'));
+  }
+})()[_0x31626c(0xdb, '(hg5')](_0x3d4e7d => $[_0x31626c(0x11d, '%ufc')](_0x3d4e7d))[_0x31626c(0x140, 's^Fb')](() => $[_0x31626c(0x133, 'iR[C')]());
+var version_ = 'jsjiami.com.v7';
